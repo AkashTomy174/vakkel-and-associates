@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import BlogCard from '../components/BlogCard/BlogCard.jsx'
-import ClientContactActions from '../components/ClientContactActions/ClientContactActions.jsx'
 import blogPosts from '../data/blog.js'
 import './insights.css'
 
@@ -13,19 +11,12 @@ function Insights() {
 
   return (
     <main className="insights-page">
-      <header className="insights-header">
-        <Link className="insights-brand" to="/"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></Link>
-        <nav><Link to="/#about">The Firm</Link><Link to="/#practice">Practice Areas</Link><Link className="active" to="/insights">News</Link></nav>
-        <Link className="insights-contact" to="/">Book a consultation <span>↗</span></Link>
-      </header>
       <section className="insights-hero"><div><span className="insights-kicker">THE JOURNAL</span><h1>Latest<br /><em>News.</em></h1><p>Perspectives on law, business and the decisions that shape both, from the legal strategists at Vakkeel & Associates.</p></div><div className="insights-hero-index"><span>Notes on law,<br />strategy and practice</span></div></section>
       <section className="insights-content">
         <div className="insights-toolbar"><div><span className="insights-kicker">THE ARCHIVE</span><h2>Latest news</h2></div><span className="insights-count">{String(visiblePosts.length).padStart(2, '0')} published notes</span></div>
         <div className="category-filter" role="group" aria-label="Filter insights by category">{categories.map((category) => <button className={selectedCategory === category ? 'selected' : ''} type="button" key={category} onClick={() => setSelectedCategory(category)}>{category}</button>)}</div>
         <div className="blog-grid">{visiblePosts.map((post, index) => <BlogCard key={post.id} post={post} index={index} />)}</div>
       </section>
-      <ClientContactActions />
-      <footer className="insights-footer"><Link className="insights-brand" to="/"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></Link><span>New Delhi · Mumbai · Kerala · Chandigarh · Bengaluru · Chennai</span><span>© 2026 Vakkeel & Associates</span></footer>
     </main>
   )
 }

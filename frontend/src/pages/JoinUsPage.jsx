@@ -2,7 +2,6 @@ import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import supabase from '../api/supabaseClient'
 import './join-us.css'
-import '../components/ClientContactActions/client-contact.css'
 
 const PRACTICES = [
   'NRI All Legal Services', 'Criminal Law', 'Corporate, Commercial & Business Law',
@@ -55,24 +54,6 @@ const EMPTY_FORM = {
   current_organization: '', primary_practice_area: '', secondary_practice_area: '',
   jurisdictions: '', expertise: '', experience: '', linkedin_url: '', website_url: '',
   association_type: '', message: '', consent: false,
-}
-
-function Nav() {
-  return (
-    <nav className="ju-nav">
-      <Link className="va-logo" to="/">
-        <span>VA</span>
-        <strong>VAKKEEL <small>& ASSOCIATES</small></strong>
-      </Link>
-      <div className="ju-nav-links">
-        <a href="/#practice">Practice Areas</a>
-        <a href="/#about">About</a>
-        <Link to="/insights">News</Link>
-        <a href="/#consultation">Contact</a>
-      </div>
-      <a className="ju-nav-cta" href="/#consultation">Book a Consultation ↗</a>
-    </nav>
-  )
 }
 
 function Hero({ onApply }) {
@@ -490,12 +471,6 @@ function JoinUsPage() {
 
   return (
     <div className="ju">
-      <div className="client-contact-actions" aria-label="Contact Vakkeel and Associates">
-        <span className="client-contact-label"><strong>Speak to us</strong><small>Advocates welcome</small></span>
-        <a className="client-contact-call" href="tel:+916369717520"><span className="material-symbols-outlined" aria-hidden="true">call</span><span>Call</span></a>
-        <a className="client-contact-whatsapp" href="https://wa.me/916369717520?text=Hello%20Vakkeel%20%26%20Associates%2C%20I%20am%20a%20legal%20professional%20interested%20in%20joining%20the%20firm." target="_blank" rel="noreferrer"><span className="material-symbols-outlined" aria-hidden="true">chat</span><span>WhatsApp</span></a>
-      </div>
-      <Nav />
       <Hero onApply={scrollToForm} />
       <Intro />
       <WhyJoin />

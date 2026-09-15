@@ -1,143 +1,608 @@
-import { Link } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
-import ClientContactActions from './components/ClientContactActions/ClientContactActions.jsx'
-import BookingCTA from './components/BookingCTA/BookingCTA.jsx'
-import { JoinUsHomepageCTA } from './pages/JoinUsPage.jsx'
-import blogPosts from './data/blog.js'
-import practiceDetails from './data/practiceDetails.js'
-import './glass-nav-flow.css'
+import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { JoinUsHomepageCTA } from "./pages/JoinUsPage.jsx";
+import { useConsultation } from "./components/layout/ConsultationContext.jsx";
+import blogPosts from "./data/blog.js";
+import practiceDetails from "./data/practiceDetails.js";
 
 const practices = [
-  { number: '01', title: 'NRI All Legal Services', tone: 'nri', eyebrow: '24 · 7 · 365 | Global Reach & Remote Filing', service: 'NRI Comprehensive Legal Desk', copy: 'Zero travel to India required. Seamless legal execution through Power of Attorney, embassy notarization, video conference court appearances, and direct WhatsApp communication across UAE, Saudi Arabia, Qatar, UK, USA, Canada, and Europe.', tags: ['POWER OF ATTORNEY (POA)', 'ZERO TRAVEL NEEDED', 'EMBASSY ATTESTATION', 'RERA LITIGATION', 'FIR QUASHING', 'LOC REMOVAL', 'MUTUAL DIVORCE', 'PROBATE OF WILL', 'INHERITANCE REPATRIATION', 'FEMA COMPLIANCE', 'IEPF SHARE RECOVERY', 'OCI CONSULTING'], details: [
-    { heading: 'Cross-Border Power of Attorney (POA) & Authentication', items: ['General Power of Attorney (GPA) and Special Power of Attorney (SPA) drafting', 'Indian Embassy / Consular attestation and Ministry of Foreign Affairs (MOFA) validation', 'Apostille processing under the Hague Convention for overseas documents', 'Adjudication and stamping of foreign POAs before local District Registrars in India', 'Revocation, cancellation, and public notice issuance for misused POAs'] },
-    { heading: 'Ancestral & Acquired Real Estate Protection', items: ['30-year title search, encumbrance verification, and document scrutiny before purchase', 'Eviction proceedings against illegal encroachers, unauthorized tenants, and land-grabbers', 'Partition suits for equitable division of inherited ancestral land and properties', 'Challenging forged title deeds, fraudulent sales, and benami transactions', 'Mutation of land records, Patta / Chitta / Pokkuvaravu updates, and survey demarcation', 'Builder delay litigation, possession enforcement, and refund recovery before RERA and NCDRC', 'Demarcation, physical site inspection reports, and boundary wall litigation'] },
-    { heading: 'Family, Matrimonial & Child Custody Relief', items: ['Fast-track mutual consent divorce via video-conferencing without physical presence', 'Contested divorce petitions on grounds of cruelty, desertion, or adultery', 'Defense and quashing of false Section 498A and Domestic Violence cases', 'Restitution of Conjugal Rights (RCR) and judicial separation', 'Cross-border child custody, visitation agreements, and parental alienation litigation', 'Inter-country child return matters under international parental abduction frameworks', 'Recognition, enforcement, and challenge of ex-parte foreign divorce decrees in Indian courts', 'Permanent alimony, interim maintenance defense, and stridhan recovery suits'] },
-    { heading: 'Criminal Defense, Bail & Cross-Border Immigration Relief', items: ['Anticipatory bail before Sessions Courts and High Courts prior to landing in India', 'Urgent bail applications for detained overseas travelers', 'Revocation and cancellation of Look Out Circulars (LOC)', 'Red Corner Notice (RCN) challenge and INTERPOL notice mitigation', 'High Court petitions for FIR quashing under Section 482 CrPC / Section 528 BNSS', 'Defense against Section 138 Negotiable Instruments Act complaints', 'Cross-border cybercrime defense, digital fraud, and financial identity theft remediation'] },
-    { heading: 'Succession, Inheritance & Wealth Management', items: ['Precision Will drafting, cross-border asset structuring, and digital repository registration', 'Probate of Will petitions and Letters of Administration before High Courts', 'Succession Certificates for bank deposits, shares, and securities', 'Legal Heir Certificate procurement through revenue authorities or civil courts', 'Family Settlement Agreements and Relinquishment Deeds', 'Private Family Trusts for smooth multi-generational wealth transfer', 'Foreign exchange compliance, inherited-fund repatriation, and Form 15CA / 15CB clearances'] },
-    { heading: 'Corporate, Commercial & Direct Investment (FDI / FEMA)', items: ['Incorporation of wholly-owned Indian subsidiaries, Joint Ventures, and LLPs', 'RBI, FEMA, and Foreign Direct Investment (FDI) compliance and filing', 'International business contracts, shareholder agreements, and NDAs', 'Debt recovery and insolvency resolution before the NCLT under IBC', 'Registration and enforcement of Trademarks, Copyrights, and Patents', 'Commercial litigation and enforcement of foreign judgments and arbitral awards'] },
-    { heading: 'Banking, Tax & Repatriation Assistance', items: ['Assistance with NRE, NRO, and FCNR bank account disputes and unauthorized freezes', 'Unblocking frozen bank accounts subject to cyber cell or police freeze orders', 'Rectification of duplicate PAN cards and resident-to-non-resident tax classification updates', 'Transfer of ancestral sale proceeds to overseas bank accounts under RBI rules', 'Recovery of lost, dormant, or unclaimed shares transferred to the IEPF authority'] },
-    { heading: 'Citizenship, Passport & Consular Documentation', items: ['Legal representation for passport renewal disputes, impounding, and revocations', 'OCI card applications, denials, and status reinstatement', 'Renunciation of Indian citizenship and surrender certificate clearance', 'Birth certificate non-availability, name mismatch affidavits, and gazette notifications', 'Adoption legalities under CARA for overseas Indians'] },
-  ] },
-  { number: '02', title: 'Criminal Law', eyebrow: '24 · 7 · 365 | Emergency Defense', service: 'Criminal Defense & Bail Service', copy: 'Anticipatory & HC regular bail, FIR quashing, and cross-border LOC relief. Filed within hours.', tags: ['ANTICIPATORY BAIL', 'REGULAR BAIL', 'FIR QUASHING', 'LOC REMOVAL', 'CYBER CRIME', 'TRIAL DEFENSE'], tone: 'criminal' }, // already set
-  { number: '03', title: 'Corporate, Commercial & Business Law', eyebrow: 'Business & Advisory', service: 'Corporate & Contract Solutions', copy: 'FDI compliance, cross-border M&A, and full-spectrum company incorporation in India.', tags: ['FDI & FEMA', 'SUBSIDIARY SETUP', 'M&A', 'CONTRACT DRAFTING', 'IBC RECOVERY', 'TRADEMARKS', 'COMPANY REGISTRATION', 'TRADEMARK & PATENT', 'FSSAI & DRUG LICENCE', 'SEBI REGISTRATION', 'FOREIGN COMPANY', 'GST & TAX FILING'], tone: 'corporate' },
-  { number: '04', title: 'Real Estate Law', eyebrow: 'Asset Protection', service: 'Property & Land Dispute Service', copy: 'Clear ancestral title verifications, builder RERA litigation, and illegal encroachment eviction.', tags: ['TITLE SEARCH', 'RERA DISPUTES', 'EVICTION', 'PARTITION SUITS', 'GPA / SALE DEEDS', 'LAND MUTATION'], tone: 'real-estate' },
-  { number: '05', title: 'Family & Matrimonial', eyebrow: 'Discreet, Decisive & Cross-Border Domestic Advocacy', service: 'Family & Matrimonial Law', copy: 'High-stakes resolution of domestic disputes, custody battles, and cross-border marital dissolution. We prioritize personal dignity, asset safeguarding, and parental rights through strategic negotiation or courtroom litigation.', tags: ['MUTUAL CONSENT DIVORCE', 'CONTESTED DIVORCE', 'CHILD CUSTODY', '498A CRUELTY DEFENSE', 'DV ACT LITIGATION', 'INTERIM MAINTENANCE', 'PERMANENT ALIMONY', 'STRIDHAN RECOVERY', 'FOREIGN DECREE DEFENSE', 'HABEAS CORPUS CUSTODY', 'MEDIATION SETTLEMENT'], tone: 'family' },
-  { number: '06', title: 'Arbitration & Commercial Settlement', eyebrow: 'Dispute Resolution', service: 'Commercial Arbitration Service', copy: 'High-stakes dispute mediation, court arbitrator appointment, and foreign award enforcement.', tags: ['SECTION 11 PETITION', 'FOREIGN AWARDS', 'MEDIATION', 'DISPUTE SETTLEMENT', 'AWARD CHALLENGE'], tone: 'arbitration' },
-  { number: '07', title: 'Maritime & Admiralty Law', eyebrow: 'Admiralty & Shipping', service: 'Maritime & Seafarer Relief', copy: 'Ship arrest warrants, seafarer wage recovery, and cargo damage claims in major Indian ports.', tags: ['VESSEL ARREST', 'SEAFARER CLAIMS', 'CARGO LOSS', 'CHARTERPARTY', 'PORT JURISDICTION'], tone: 'maritime' },
-  { number: '08', title: 'Wealth Management, Succession & Inheritance Law', eyebrow: 'Estate & Legacy', service: 'Will & Succession Service', copy: 'Flawless probate petitions, legal heir certifications, and compliant overseas fund repatriation.', tags: ['WILL DRAFTING', 'PROBATE OF WILL', 'SUCCESSION CERTIFICATE', 'FAMILY TRUST', '15CA / 15CB'], tone: 'wealth' },
-  { number: '09', title: 'Labour & Employment Law', eyebrow: 'Employment & Compliance', service: 'Executive Employment Service', copy: 'Severance negotiations, cross-border remote contracts, and returning NRI pension settlements.', tags: ['WRONGFUL TERMINATION', 'EXECUTIVE CONTRACTS', 'NON-COMPETE', 'POSH', 'PF & GRATUITY'], tone: 'employment' },
-]
+  {
+    number: "01",
+    title: "NRI All Legal Services",
+    tone: "nri",
+    eyebrow: "24 · 7 · 365 | Global Reach & Remote Filing",
+    service: "NRI Comprehensive Legal Desk",
+    copy: "Zero travel to India required. Seamless legal execution through Power of Attorney, embassy notarization, video conference court appearances, and direct WhatsApp communication across UAE, Saudi Arabia, Qatar, UK, USA, Canada, and Europe.",
+    tags: [
+      "POWER OF ATTORNEY (POA)",
+      "ZERO TRAVEL NEEDED",
+      "EMBASSY ATTESTATION",
+      "RERA LITIGATION",
+      "FIR QUASHING",
+      "LOC REMOVAL",
+      "MUTUAL DIVORCE",
+      "PROBATE OF WILL",
+      "INHERITANCE REPATRIATION",
+      "FEMA COMPLIANCE",
+      "IEPF SHARE RECOVERY",
+      "OCI CONSULTING",
+    ],
+    details: [
+      {
+        heading: "Cross-Border Power of Attorney (POA) & Authentication",
+        items: [
+          "General Power of Attorney (GPA) and Special Power of Attorney (SPA) drafting",
+          "Indian Embassy / Consular attestation and Ministry of Foreign Affairs (MOFA) validation",
+          "Apostille processing under the Hague Convention for overseas documents",
+          "Adjudication and stamping of foreign POAs before local District Registrars in India",
+          "Revocation, cancellation, and public notice issuance for misused POAs",
+        ],
+      },
+      {
+        heading: "Ancestral & Acquired Real Estate Protection",
+        items: [
+          "30-year title search, encumbrance verification, and document scrutiny before purchase",
+          "Eviction proceedings against illegal encroachers, unauthorized tenants, and land-grabbers",
+          "Partition suits for equitable division of inherited ancestral land and properties",
+          "Challenging forged title deeds, fraudulent sales, and benami transactions",
+          "Mutation of land records, Patta / Chitta / Pokkuvaravu updates, and survey demarcation",
+          "Builder delay litigation, possession enforcement, and refund recovery before RERA and NCDRC",
+          "Demarcation, physical site inspection reports, and boundary wall litigation",
+        ],
+      },
+      {
+        heading: "Family, Matrimonial & Child Custody Relief",
+        items: [
+          "Fast-track mutual consent divorce via video-conferencing without physical presence",
+          "Contested divorce petitions on grounds of cruelty, desertion, or adultery",
+          "Defense and quashing of false Section 498A and Domestic Violence cases",
+          "Restitution of Conjugal Rights (RCR) and judicial separation",
+          "Cross-border child custody, visitation agreements, and parental alienation litigation",
+          "Inter-country child return matters under international parental abduction frameworks",
+          "Recognition, enforcement, and challenge of ex-parte foreign divorce decrees in Indian courts",
+          "Permanent alimony, interim maintenance defense, and stridhan recovery suits",
+        ],
+      },
+      {
+        heading: "Criminal Defense, Bail & Cross-Border Immigration Relief",
+        items: [
+          "Anticipatory bail before Sessions Courts and High Courts prior to landing in India",
+          "Urgent bail applications for detained overseas travelers",
+          "Revocation and cancellation of Look Out Circulars (LOC)",
+          "Red Corner Notice (RCN) challenge and INTERPOL notice mitigation",
+          "High Court petitions for FIR quashing under Section 482 CrPC / Section 528 BNSS",
+          "Defense against Section 138 Negotiable Instruments Act complaints",
+          "Cross-border cybercrime defense, digital fraud, and financial identity theft remediation",
+        ],
+      },
+      {
+        heading: "Succession, Inheritance & Wealth Management",
+        items: [
+          "Precision Will drafting, cross-border asset structuring, and digital repository registration",
+          "Probate of Will petitions and Letters of Administration before High Courts",
+          "Succession Certificates for bank deposits, shares, and securities",
+          "Legal Heir Certificate procurement through revenue authorities or civil courts",
+          "Family Settlement Agreements and Relinquishment Deeds",
+          "Private Family Trusts for smooth multi-generational wealth transfer",
+          "Foreign exchange compliance, inherited-fund repatriation, and Form 15CA / 15CB clearances",
+        ],
+      },
+      {
+        heading: "Corporate, Commercial & Direct Investment (FDI / FEMA)",
+        items: [
+          "Incorporation of wholly-owned Indian subsidiaries, Joint Ventures, and LLPs",
+          "RBI, FEMA, and Foreign Direct Investment (FDI) compliance and filing",
+          "International business contracts, shareholder agreements, and NDAs",
+          "Debt recovery and insolvency resolution before the NCLT under IBC",
+          "Registration and enforcement of Trademarks, Copyrights, and Patents",
+          "Commercial litigation and enforcement of foreign judgments and arbitral awards",
+        ],
+      },
+      {
+        heading: "Banking, Tax & Repatriation Assistance",
+        items: [
+          "Assistance with NRE, NRO, and FCNR bank account disputes and unauthorized freezes",
+          "Unblocking frozen bank accounts subject to cyber cell or police freeze orders",
+          "Rectification of duplicate PAN cards and resident-to-non-resident tax classification updates",
+          "Transfer of ancestral sale proceeds to overseas bank accounts under RBI rules",
+          "Recovery of lost, dormant, or unclaimed shares transferred to the IEPF authority",
+        ],
+      },
+      {
+        heading: "Citizenship, Passport & Consular Documentation",
+        items: [
+          "Legal representation for passport renewal disputes, impounding, and revocations",
+          "OCI card applications, denials, and status reinstatement",
+          "Renunciation of Indian citizenship and surrender certificate clearance",
+          "Birth certificate non-availability, name mismatch affidavits, and gazette notifications",
+          "Adoption legalities under CARA for overseas Indians",
+        ],
+      },
+    ],
+  },
+  {
+    number: "02",
+    title: "Criminal Law",
+    eyebrow: "24 · 7 · 365 | Emergency Defense",
+    service: "Criminal Defense & Bail Service",
+    copy: "Anticipatory & HC regular bail, FIR quashing, and cross-border LOC relief. Filed within hours.",
+    tags: [
+      "ANTICIPATORY BAIL",
+      "REGULAR BAIL",
+      "FIR QUASHING",
+      "LOC REMOVAL",
+      "CYBER CRIME",
+      "TRIAL DEFENSE",
+    ],
+    tone: "criminal",
+  }, // already set
+  {
+    number: "03",
+    title: "Corporate, Commercial & Business Law",
+    eyebrow: "Business & Advisory",
+    service: "Corporate & Contract Solutions",
+    copy: "FDI compliance, cross-border M&A, and full-spectrum company incorporation in India.",
+    tags: [
+      "FDI & FEMA",
+      "SUBSIDIARY SETUP",
+      "M&A",
+      "CONTRACT DRAFTING",
+      "IBC RECOVERY",
+      "TRADEMARKS",
+      "COMPANY REGISTRATION",
+      "TRADEMARK & PATENT",
+      "FSSAI & DRUG LICENCE",
+      "SEBI REGISTRATION",
+      "FOREIGN COMPANY",
+      "GST & TAX FILING",
+    ],
+    tone: "corporate",
+  },
+  {
+    number: "04",
+    title: "Real Estate Law",
+    eyebrow: "Asset Protection",
+    service: "Property & Land Dispute Service",
+    copy: "Clear ancestral title verifications, builder RERA litigation, and illegal encroachment eviction.",
+    tags: [
+      "TITLE SEARCH",
+      "RERA DISPUTES",
+      "EVICTION",
+      "PARTITION SUITS",
+      "GPA / SALE DEEDS",
+      "LAND MUTATION",
+    ],
+    tone: "real-estate",
+  },
+  {
+    number: "05",
+    title: "Family & Matrimonial",
+    eyebrow: "Discreet, Decisive & Cross-Border Domestic Advocacy",
+    service: "Family & Matrimonial Law",
+    copy: "High-stakes resolution of domestic disputes, custody battles, and cross-border marital dissolution. We prioritize personal dignity, asset safeguarding, and parental rights through strategic negotiation or courtroom litigation.",
+    tags: [
+      "MUTUAL CONSENT DIVORCE",
+      "CONTESTED DIVORCE",
+      "CHILD CUSTODY",
+      "498A CRUELTY DEFENSE",
+      "DV ACT LITIGATION",
+      "INTERIM MAINTENANCE",
+      "PERMANENT ALIMONY",
+      "STRIDHAN RECOVERY",
+      "FOREIGN DECREE DEFENSE",
+      "HABEAS CORPUS CUSTODY",
+      "MEDIATION SETTLEMENT",
+    ],
+    tone: "family",
+  },
+  {
+    number: "06",
+    title: "Arbitration & Commercial Settlement",
+    eyebrow: "Dispute Resolution",
+    service: "Commercial Arbitration Service",
+    copy: "High-stakes dispute mediation, court arbitrator appointment, and foreign award enforcement.",
+    tags: [
+      "SECTION 11 PETITION",
+      "FOREIGN AWARDS",
+      "MEDIATION",
+      "DISPUTE SETTLEMENT",
+      "AWARD CHALLENGE",
+    ],
+    tone: "arbitration",
+  },
+  {
+    number: "07",
+    title: "Maritime & Admiralty Law",
+    eyebrow: "Admiralty & Shipping",
+    service: "Maritime & Seafarer Relief",
+    copy: "Ship arrest warrants, seafarer wage recovery, and cargo damage claims in major Indian ports.",
+    tags: [
+      "VESSEL ARREST",
+      "SEAFARER CLAIMS",
+      "CARGO LOSS",
+      "CHARTERPARTY",
+      "PORT JURISDICTION",
+    ],
+    tone: "maritime",
+  },
+  {
+    number: "08",
+    title: "Wealth Management, Succession & Inheritance Law",
+    eyebrow: "Estate & Legacy",
+    service: "Will & Succession Service",
+    copy: "Flawless probate petitions, legal heir certifications, and compliant overseas fund repatriation.",
+    tags: [
+      "WILL DRAFTING",
+      "PROBATE OF WILL",
+      "SUCCESSION CERTIFICATE",
+      "FAMILY TRUST",
+      "15CA / 15CB",
+    ],
+    tone: "wealth",
+  },
+  {
+    number: "09",
+    title: "Labour & Employment Law",
+    eyebrow: "Employment & Compliance",
+    service: "Executive Employment Service",
+    copy: "Severance negotiations, cross-border remote contracts, and returning NRI pension settlements.",
+    tags: [
+      "WRONGFUL TERMINATION",
+      "EXECUTIVE CONTRACTS",
+      "NON-COMPETE",
+      "POSH",
+      "PF & GRATUITY",
+    ],
+    tone: "employment",
+  },
+];
 
 const detailedPractices = practices.map((practice) => ({
   ...practice,
   details: practice.details || practiceDetails[practice.title],
-}))
+}));
 
 function useModalAccessibility(isOpen, onClose) {
-  const dialogRef = useRef(null)
-  const closeRef = useRef(null)
-  const onCloseRef = useRef(onClose)
-  onCloseRef.current = onClose
+  const dialogRef = useRef(null);
+  const closeRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   useEffect(() => {
-    if (!isOpen) return undefined
-    const trigger = document.activeElement
-    const dialog = dialogRef.current
-    const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    const focusable = () => Array.from(dialog?.querySelectorAll(focusableSelector) || [])
+    if (!isOpen) return undefined;
+    const trigger = document.activeElement;
+    const dialog = dialogRef.current;
+    const focusableSelector =
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusable = () =>
+      Array.from(dialog?.querySelectorAll(focusableSelector) || []);
 
-    closeRef.current?.focus()
+    closeRef.current?.focus();
     function handleKeyDown(event) {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        onCloseRef.current()
-        return
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCloseRef.current();
+        return;
       }
-      if (event.key !== 'Tab' || !dialog) return
-      const elements = focusable()
-      if (!elements.length) return
-      const first = elements[0]
-      const last = elements[elements.length - 1]
+      if (event.key !== "Tab" || !dialog) return;
+      const elements = focusable();
+      if (!elements.length) return;
+      const first = elements[0];
+      const last = elements[elements.length - 1];
       if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
+        event.preventDefault();
+        last.focus();
       } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
+        event.preventDefault();
+        first.focus();
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      if (trigger instanceof HTMLElement) trigger.focus()
-    }
-  }, [isOpen])
+      document.removeEventListener("keydown", handleKeyDown);
+      if (trigger instanceof HTMLElement) trigger.focus();
+    };
+  }, [isOpen]);
 
-  return { dialogRef, closeRef }
+  return { dialogRef, closeRef };
 }
 
-/* Placeholder team data, retained until the verified lawyer list is ready.
-const advocates = [
-  { name: 'Ananya Deshmukh', role: 'Partner · Family & Private Wealth', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=900&q=85', areas: 'Family · Succession' },
-  { name: 'Rajeshwar Rao', role: 'Managing Partner · Corporate & Insolvency', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85', areas: 'Corporate · Arbitration' },
-  { name: 'K. N. Venkatachalam', role: 'Advocate-on-Record · Constitutional Law', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=85', areas: 'Apex Court · Writs' },
-]
-*/
-
 function GlassLandingPage() {
-  const [consultOpen, setConsultOpen] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [selectedPractice, setSelectedPractice] = useState(null)
-  const practiceModal = useModalAccessibility(Boolean(selectedPractice), () => setSelectedPractice(null))
-  const consultModal = useModalAccessibility(consultOpen, () => setConsultOpen(false))
+  const { openConsultation } = useConsultation();
+  const [selectedPractice, setSelectedPractice] = useState(null);
+  const practiceModal = useModalAccessibility(Boolean(selectedPractice), () =>
+    setSelectedPractice(null),
+  );
   return (
-    <main className="glass-site">
-      <header className="glass-header">
-      <nav className="glass-nav">
-        <a className="va-logo" href="#top"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></a>
-        <div className={menuOpen ? 'glass-nav-links open' : 'glass-nav-links'}><a href="#about" onClick={() => setMenuOpen(false)}>About</a><a href="#practice" onClick={() => setMenuOpen(false)}>Practice Areas</a><a href="/insights" onClick={() => setMenuOpen(false)}>News</a></div>
-        <button className="gold-glass-button" type="button" onClick={() => setConsultOpen(true)}>Book a consultation <span>↗</span></button>
-        <button className="glass-menu" aria-label={menuOpen ? 'Close menu' : 'Open menu'} type="button" onClick={() => setMenuOpen((current) => !current)}><span /><span /></button>
-      </nav>
-      <div className="glass-announcement"><span className="glass-pulse" /><span className="glass-announcement-primary">AVAILABLE 24/7 — EMERGENCY LEGAL RESPONSE UNDER 45 MINUTES</span><span className="glass-announcement-sep">·</span><span className="glass-announcement-secondary">NRI GLOBAL DESK ACTIVE</span><span className="glass-announcement-sep">·</span><a href="#consultation">Book now ↗</a></div>
-      <ClientContactActions />
-      </header>
-
+    <>
       <section className="glass-hero" id="top">
-        <div className="ambient-orb orb-one" /><div className="ambient-orb orb-two" /><div className="ambient-orb orb-three" /><div className="fine-grid" />
-        <div className="hero-content"><div className="glass-eyebrow"><span className="eyebrow-line" /> JUSTICE WITHOUT BORDERS <span className="hero-coordinate"></span></div><h1>Every case demands<br />a <em>defense strategy.</em></h1><p className="hero-motto">"Complex cases require more than legal knowledge. They require a defense strategy."</p><p>We build the defense around your case because we are experts in it. Vakkeel & Associates brings focused legal strategy to high-stakes litigation, complex commercial matters and the global Indian diaspora.</p><div className="hero-actions"><button className="gold-glass-button large" type="button" onClick={() => setConsultOpen(true)}>Book a consultation <span>↗</span></button><a className="clear-glass-button" href="#practice">Explore our practice <span>↗</span></a></div></div>
-        <div className="hero-panel glass-level-3"><div className="panel-top"><span>THE PRACTICE</span><span className="panel-dot" /></div><strong>09</strong><h2>Specialist<br /><em>practice areas</em></h2><div className="panel-list"><span>NRI All Legal Services</span><span>Criminal Law</span><span>Corporate Law & Business Commercial</span><span>Real Estate Law</span></div><div className="panel-footer"><span>ADVISORY · ADVOCACY · STRATEGY</span><span>↓</span></div></div>
-        <div className="hero-side-note">01 <span>Precision is not a promise.<br />It is a practice.</span></div>
+        <div className="ambient-orb orb-one" />
+        <div className="ambient-orb orb-two" />
+        <div className="ambient-orb orb-three" />
+        <div className="fine-grid" />
+        <div className="hero-content">
+          <div className="glass-eyebrow">
+            <span className="eyebrow-line" /> JUSTICE WITHOUT BORDERS{" "}
+            <span className="hero-coordinate"></span>
+          </div>
+          <h1>
+            Every case demands
+            <br />a <em>defense strategy.</em>
+          </h1>
+          <p className="hero-motto">
+            "Complex cases require more than legal knowledge. They require a
+            defense strategy."
+          </p>
+          <p>
+            We build the defense around your case because we are experts in it.
+            Vakkeel & Associates brings focused legal strategy to high-stakes
+            litigation, complex commercial matters and the global Indian
+            diaspora.
+          </p>
+          <div className="hero-actions">
+            <button
+              className="gold-glass-button large"
+              type="button"
+              onClick={openConsultation}
+            >
+              Book a consultation <span>↗</span>
+            </button>
+            <a className="clear-glass-button" href="#practice">
+              Explore our practice <span>↗</span>
+            </a>
+          </div>
+        </div>
+        <div className="hero-panel glass-level-3">
+          <div className="panel-top">
+            <span>THE PRACTICE</span>
+            <span className="panel-dot" />
+          </div>
+          <strong>09</strong>
+          <h2>
+            Specialist
+            <br />
+            <em>practice areas</em>
+          </h2>
+          <div className="panel-list">
+            <span>NRI All Legal Services</span>
+            <span>Criminal Law</span>
+            <span>Corporate Law & Business Commercial</span>
+            <span>Real Estate Law</span>
+          </div>
+          <div className="panel-footer">
+            <span>ADVISORY · ADVOCACY · STRATEGY</span>
+            <span>↓</span>
+          </div>
+        </div>
+        <div className="hero-side-note">
+          01{" "}
+          <span>
+            Precision is not a promise.
+            <br />
+            It is a practice.
+          </span>
+        </div>
       </section>
 
-      <section className="practice-section-glass" id="practice"><div className="glass-section-heading"><div><span className="section-kicker">PRACTICE AREAS</span><h2>Specialist practice<br /><em>across 9 domains.</em></h2></div><p>Focused expertise for matters where precision, strategy and experience matter. Every brief begins with understanding what is truly at stake.</p></div><div className="glass-practice-grid">{detailedPractices.map((practice) => <article className={`glass-practice-card tone-${practice.tone}`} key={practice.title}><button className="practice-card-trigger" type="button" onClick={() => setSelectedPractice(practice)} aria-label={`Explore details for ${practice.title}`}><div className="practice-card-top"><span>{practice.number}</span><span className="card-arrow">↗</span></div><span className="practice-eyebrow">{practice.eyebrow}</span><h3>{practice.title}</h3><strong className="practice-service">{practice.service}</strong><p>{practice.copy}</p><div className="practice-tags">{practice.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><span className="practice-explore">Explore details <span>↗</span></span></button><a className="practice-discuss" href="#consultation">Discuss this practice <span className="material-symbols-outlined">arrow_forward</span></a></article>)}</div></section>
+      <section className="practice-section-glass" id="practice">
+        <div className="glass-section-heading">
+          <div>
+            <span className="section-kicker">PRACTICE AREAS</span>
+            <h2>
+              Specialist practice
+              <br />
+              <em>across 9 domains.</em>
+            </h2>
+          </div>
+          <p>
+            Focused expertise for matters where precision, strategy and
+            experience matter. Every brief begins with understanding what is
+            truly at stake.
+          </p>
+        </div>
+        <div className="glass-practice-grid">
+          {detailedPractices.map((practice) => (
+            <article
+              className={`glass-practice-card tone-${practice.tone}`}
+              key={practice.title}
+            >
+              <button
+                className="practice-card-trigger"
+                type="button"
+                onClick={() => setSelectedPractice(practice)}
+                aria-label={`Explore details for ${practice.title}`}
+              >
+                <div className="practice-card-top">
+                  <span>{practice.number}</span>
+                  <span className="card-arrow">↗</span>
+                </div>
+                <span className="practice-eyebrow">{practice.eyebrow}</span>
+                <h3>{practice.title}</h3>
+                <strong className="practice-service">{practice.service}</strong>
+                <p>{practice.copy}</p>
+                <div className="practice-tags">
+                  {practice.tags.map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+                <span className="practice-explore">
+                  Explore details <span>↗</span>
+                </span>
+              </button>
+              <a className="practice-discuss" href="#consultation">
+                Discuss this practice{" "}
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
 
-      <section className="win-section"><span className="section-kicker">WHY WE WIN</span><h2>Advocacy is personal.<br /><em>Competence is decisive.</em></h2><p>Legal advocacy is a highly individual professional service. Cases move on judgment, preparation and courtroom skill, so we build every matter around highly competent counsel and a focused strategy.</p></section>
+      <section className="win-section">
+        <span className="section-kicker">WHY WE WIN</span>
+        <h2>
+          Advocacy is personal.
+          <br />
+          <em>Competence is decisive.</em>
+        </h2>
+        <p>
+          Legal advocacy is a highly individual professional service. Cases move
+          on judgment, preparation and courtroom skill, so we build every matter
+          around highly competent counsel and a focused strategy.
+        </p>
+      </section>
 
       {/* Metrics held until verified firm figures are available.
       <section className="trust-glass-section"><div className="section-kicker">02 / THE MEASURE OF OUR WORK</div><div className="trust-glass-grid"><div><strong>08</strong><span>Specialist<br />practice areas</span></div><div><strong>500<span>+</span></strong><span>Matters supported<br />across India</span></div><div><strong>15<span>+</span></strong><span>Years of strategic<br />experience</span></div><div><strong>01</strong><span>Strategic approach<br />to every matter</span></div></div></section>
       */}
 
-      <section className="editorial-section" id="about"><div className="editorial-mark">“</div><div className="editorial-statement"><span className="section-kicker">THE FIRM</span><h2>A different approach<br />to <em>legal practice.</em></h2></div><div className="editorial-copy"><span className="gold-rule" /><p>Every case we handle demands a defence strategy. We build the defence around it because we are experts in it.</p><p>Vakkeel & Associates brings institutional rigour and individual attention to the most consequential legal questions.</p><a className="editorial-link" href="#insights">Read our news <span>↗</span></a></div></section>
+      <section className="editorial-section" id="about">
+        <div className="editorial-mark">“</div>
+        <div className="editorial-statement">
+          <span className="section-kicker">THE FIRM</span>
+          <h2>
+            A different approach
+            <br />
+            to <em>legal practice.</em>
+          </h2>
+        </div>
+        <div className="editorial-copy">
+          <span className="gold-rule" />
+          <p>
+            Every case we handle demands a defence strategy. We build the
+            defence around it because we are experts in it.
+          </p>
+          <p>
+            Vakkeel & Associates brings institutional rigour and individual
+            attention to the most consequential legal questions.
+          </p>
+          <a className="editorial-link" href="#insights">
+            Read our news <span>↗</span>
+          </a>
+        </div>
+      </section>
 
-      {/* Team section is held until the verified lawyer list is ready.
-      <section className="team-section" id="team"><div className="glass-section-heading"><div><span className="section-kicker">04 / THE COLLEGIUM</span><h2>Counsel behind<br /><em>the strategy.</em></h2></div><p>Senior advocates and specialist practitioners connected across India’s most important courts and commercial centres.</p></div><div className="team-grid">{advocates.map((advocate) => <article className="team-card" key={advocate.name}><img src={advocate.image} alt={advocate.name} /><div className="team-overlay"><div><h3>{advocate.name}</h3><p>{advocate.role}</p></div><span>{advocate.areas} ↗</span></div></article>)}</div><a className="team-link" href="/advocates">Meet the full collegium <span>↗</span></a></section>
-      */}
+      <section className="insights-section" id="insights">
+        <div className="glass-section-heading">
+          <div>
+            <span className="section-kicker">NEWS</span>
+            <h2>
+              Thinking beyond
+              <br />
+              <em>the brief.</em>
+            </h2>
+          </div>
+          <p>
+            Perspectives on law, business and the decisions that shape both.
+          </p>
+        </div>
+        <div className="insights-grid">
+          {blogPosts.slice(0, 5).map((post, index) => (
+            <Link
+              className={`insight-card ${index === 0 ? "featured-insight" : index % 2 === 0 ? "small-insight burgundy" : "small-insight"}`}
+              to={`/insights/${post.slug}`}
+              key={post.id}
+            >
+              <span className="insight-type">
+                {post.category} · {post.date}
+              </span>
+              <h3>{post.title}</h3>
+              <p>{index === 0 ? post.excerpt : ""}</p>
+              <span className="insight-link">
+                Read {index === 0 ? "analysis" : "note"} <span>↗</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      <section className="insights-section" id="insights"><div className="glass-section-heading"><div><span className="section-kicker">NEWS</span><h2>Thinking beyond<br /><em>the brief.</em></h2></div><p>Perspectives on law, business and the decisions that shape both.</p></div><div className="insights-grid">{blogPosts.slice(0, 5).map((post, index) => <Link className={`insight-card ${index === 0 ? 'featured-insight' : index % 2 === 0 ? 'small-insight burgundy' : 'small-insight'}`} to={`/insights/${post.slug}`} key={post.id}><span className="insight-type">{post.category} · {post.date}</span><h3>{post.title}</h3><p>{index === 0 ? post.excerpt : ''}</p><span className="insight-link">Read {index === 0 ? 'analysis' : 'note'} <span>↗</span></span></Link>)}</div></section>
+      {selectedPractice && (
+        <div
+          className="practice-detail-backdrop"
+          role="presentation"
+          onClick={(event) =>
+            event.target === event.currentTarget && setSelectedPractice(null)
+          }
+        >
+          <div
+            ref={practiceModal.dialogRef}
+            className="practice-detail-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="practice-detail-title"
+          >
+            <button
+              ref={practiceModal.closeRef}
+              className="practice-detail-close"
+              type="button"
+              onClick={() => setSelectedPractice(null)}
+              aria-label="Close details"
+            >
+              ×
+            </button>
+            <span className="section-kicker">{selectedPractice.eyebrow}</span>
+            <h2 id="practice-detail-title">{selectedPractice.title}</h2>
+            <strong className="practice-detail-service">
+              {selectedPractice.service}
+            </strong>
+            <p className="practice-detail-intro">{selectedPractice.copy}</p>
+            <div className="practice-detail-sections">
+              {(
+                selectedPractice.details || [
+                  { heading: "Services covered", items: selectedPractice.tags },
+                ]
+              ).map((detail) => (
+                <section key={detail.heading}>
+                  <h3>{detail.heading}</h3>
+                  <ul>
+                    {detail.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+            <a
+              className="gold-glass-button large"
+              href="#consultation"
+              onClick={() => setSelectedPractice(null)}
+            >
+              Discuss this practice <span>↗</span>
+            </a>
+          </div>
+        </div>
+      )}
 
-      {selectedPractice && <div className="practice-detail-backdrop" role="presentation" onClick={(event) => event.target === event.currentTarget && setSelectedPractice(null)}><div ref={practiceModal.dialogRef} className="practice-detail-modal" role="dialog" aria-modal="true" aria-labelledby="practice-detail-title"><button ref={practiceModal.closeRef} className="practice-detail-close" type="button" onClick={() => setSelectedPractice(null)} aria-label="Close details">×</button><span className="section-kicker">{selectedPractice.eyebrow}</span><h2 id="practice-detail-title">{selectedPractice.title}</h2><strong className="practice-detail-service">{selectedPractice.service}</strong><p className="practice-detail-intro">{selectedPractice.copy}</p><div className="practice-detail-sections">{(selectedPractice.details || [{ heading: 'Services covered', items: selectedPractice.tags }]).map((detail) => <section key={detail.heading}><h3>{detail.heading}</h3><ul>{detail.items.map((item) => <li key={item}>{item}</li>)}</ul></section>)}</div><a className="gold-glass-button large" href="#consultation" onClick={() => setSelectedPractice(null)}>Discuss this practice <span>↗</span></a></div></div>}
-
-      <section className="consultation-section" id="consultation"><div className="consult-glow" /><div className="consult-panel"><span className="section-kicker">START A CONVERSATION</span><h2>Your matter deserves<br />a <em>precise strategy.</em></h2><p>Speak with our chamber about your legal requirements. All initial conversations are treated with discretion.</p><div><button className="gold-glass-button large" type="button" onClick={() => setConsultOpen(true)}>Book a consultation <span>↗</span></button><a className="clear-glass-button" href="tel:+916369717520">Call the firm <span>↗</span></a></div></div></section>
+      <section className="consultation-section" id="consultation">
+        <div className="consult-glow" />
+        <div className="consult-panel">
+          <span className="section-kicker">START A CONVERSATION</span>
+          <h2>
+            Your matter deserves
+            <br />a <em>precise strategy.</em>
+          </h2>
+          <p>
+            Speak with our chamber about your legal requirements. All initial
+            conversations are treated with discretion.
+          </p>
+          <div>
+            <button
+              className="gold-glass-button large"
+              type="button"
+              onClick={openConsultation}
+            >
+              Book a consultation <span>↗</span>
+            </button>
+            <a className="clear-glass-button" href="tel:+916369717520">
+              Call the firm <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
 
       <JoinUsHomepageCTA />
-
-      <footer className="glass-footer"><a className="va-logo" href="#top"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></a><div><span className="footer-label-glass">Explore</span><a href="#about">About</a><a href="#practice">Practice areas</a><a href="/insights">News</a></div><div><span className="footer-label-glass">Connect</span><a href="mailto:Vakkeelandassociates@gmail.com">Vakkeelandassociates@gmail.com</a><a href="tel:+916369717520">+91 6369717520</a><a href="https://wa.me/916369717520">WhatsApp chamber</a></div><div><span className="footer-label-glass">Chambers</span><span>New Delhi · Mumbai · Kerala</span><span>Chandigarh · Bengaluru · Chennai</span><span>© 2026 Vakkeel & Associates</span></div><div><span className="footer-label-glass">For Legal Professionals</span><a href="/join">Join Vakkeel & Associates</a><a href="/join">Become an Associate Partner</a></div><div className="footer-disclaimer"><strong>IMPORTANT NOTICE — LEGAL TECH PLATFORM &amp; MEDIATION SERVICE</strong><p>Vakkeel &amp; Associates operates as a legal tech startup and mediation service that connects clients with empanelled advocates enrolled with their respective Bar Councils across India. We are not a traditional law firm and do not directly provide legal representation.</p><p>As per the Bar Council of India Rules, advocates are not permitted to advertise or solicit work. The content on this website is published for informational purposes only and does not constitute legal advice, nor does it create an attorney-client relationship. For specific legal advice, please consult a qualified advocate.</p><span>© 2026 Vakkeel &amp; Associates — Legal Tech Startup &amp; Mediation Service. Nilambur, Kerala. Sister Brand of Indian Law School.</span></div></footer>
-
-
-      {consultOpen && <div className="glass-modal-backdrop" role="presentation" onClick={(event) => event.target === event.currentTarget && setConsultOpen(false)}><div ref={consultModal.dialogRef} className="glass-consult-modal" role="dialog" aria-modal="true"><button ref={consultModal.closeRef} className="glass-close" type="button" onClick={() => setConsultOpen(false)} aria-label="Close">×</button><BookingCTA practices={practices} isEmergency={false} onClose={() => setConsultOpen(false)} /></div></div>}
-    </main>
-  )
+    </>
+  );
 }
 
-export default GlassLandingPage
+export default GlassLandingPage;
