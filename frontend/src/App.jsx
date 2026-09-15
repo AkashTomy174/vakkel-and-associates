@@ -2,7 +2,7 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import AdvocatesPage from './AdvocatesPage.jsx'
-import OnboardingPage from './OnboardingPage.jsx'
+// import OnboardingPage from './OnboardingPage.jsx'
 import GlassLandingPage from './GlassLandingPage.jsx'
 import Insights from './pages/Insights.jsx'
 import BlogPost from './pages/BlogPost.jsx'
@@ -62,14 +62,9 @@ function App() {
       <Route path="/advocates" element={<AdvocatesPage />} />
       <Route path="/insights" element={<Insights />} />
       <Route path="/insights/:slug" element={<BlogPost />} />
-      <Route path="/join" element={<OnboardingPage />} />
-      <Route path="/join-us" element={<JoinUsPage />} />
-      <Route path="/admin/applications" element={<OnboardingPage />} />
-      <Route path="/onboarding/approved" element={<OnboardingPage />} />
-      <Route path="/legacy-home" element={<HomePage />} />
+      <Route path="/join" element={<JoinUsPage />} />
       <Route path="*" element={<GlassLandingPage />} />
     </Routes>
   )
 }
-
 export default App
