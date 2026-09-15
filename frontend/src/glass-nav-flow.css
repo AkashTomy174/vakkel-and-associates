@@ -1,0 +1,83 @@
+.glass-nav {
+  position: fixed;
+}
+
+.hero-motto {
+  margin: 0 0 17px;
+  color: var(--glass-gold) !important;
+  font: 500 18px/1.3 'Cormorant Garamond', serif !important;
+  letter-spacing: .02em;
+}
+
+@media (max-width: 600px) {
+  .glass-hero {
+    padding-top: 155px;
+  }
+}
+
+.glass-practice-card {
+  min-height: 430px;
+}
+
+.practice-eyebrow {
+  display: block;
+  margin-top: 21px;
+  color: var(--glass-gold);
+  font: 600 9px/1.3 'Manrope', sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.practice-service {
+  display: block;
+  margin: 13px 0 8px;
+  color: #fff;
+  font: 600 16px/1.1 'Cormorant Garamond', serif;
+}
+
+.glass-practice-card p {
+  min-height: 0;
+  margin: 0;
+  color: var(--glass-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.practice-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 17px;
+}
+
+.practice-tags span {
+  padding: 5px 6px;
+  border: 1px solid rgba(201,162,58,.28);
+  color: #c5c2cf;
+  font: 600 7px/1 'Manrope', sans-serif;
+  letter-spacing: .06em;
+}
+
+@media (max-width: 900px) {
+  .glass-practice-card { min-height: 390px; }
+}
+
+@media (max-width: 600px) {
+  .glass-practice-card { min-height: 0; }
+  .practice-service { font-size: 18px; }
+}
+
+.glass-practice-card { cursor: pointer; }
+.practice-detail-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 24px; background: rgba(5,4,20,.78); backdrop-filter: blur(8px); }
+.practice-detail-modal { position: relative; width: min(100%, 850px); max-height: min(88vh, 800px); overflow-y: auto; padding: 42px; border: 1px solid rgba(255,255,255,.16); border-top: 2px solid var(--glass-gold); border-radius: 21px; color: white; background: linear-gradient(145deg, rgba(36,32,82,.96), rgba(14,13,43,.98)); box-shadow: 0 30px 90px rgba(0,0,0,.45); }
+.practice-detail-close { position: absolute; top: 15px; right: 17px; width: 34px; height: 34px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; color: #c5c2cf; background: transparent; font-size: 22px; line-height: 1; cursor: pointer; }
+.practice-detail-close:hover { color: white; border-color: var(--glass-gold); }
+.practice-detail-modal h2 { max-width: 700px; margin: 14px 0 8px; font: 600 clamp(37px, 5vw, 62px)/.95 'Cormorant Garamond', serif; }
+.practice-detail-service { display: block; color: var(--glass-gold); font: 600 18px/1.2 'Cormorant Garamond', serif; }
+.practice-detail-intro { max-width: 720px; margin: 18px 0 28px; color: #c5c2cf; font-size: 13px; line-height: 1.7; }
+.practice-detail-sections { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 30px; margin-bottom: 30px; }
+.practice-detail-sections section { padding-top: 17px; border-top: 1px solid rgba(255,255,255,.14); }
+.practice-detail-sections h3 { margin: 0 0 10px; color: white; font: 600 22px/1.05 'Cormorant Garamond', serif; }
+.practice-detail-sections ul { display: grid; gap: 8px; margin: 0; padding-left: 17px; color: #c5c2cf; font-size: 11px; line-height: 1.5; }
+.practice-detail-sections li::marker { color: var(--glass-gold); }
+@media (max-width: 600px) { .practice-detail-backdrop { padding: 12px; }.practice-detail-modal { max-height: 92vh; padding: 34px 20px 25px; border-radius: 17px; }.practice-detail-modal h2 { font-size: 45px; }.practice-detail-sections { grid-template-columns: 1fr; gap: 18px; }.practice-detail-sections h3 { font-size: 24px; }.practice-detail-sections ul { font-size: 12px; } }

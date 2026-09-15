@@ -1,0 +1,11 @@
+.client-contact-actions { position: fixed; top: 105px; right: 24px; z-index: 9; display: flex; align-items: center; gap: 7px; padding: 7px; border: 1px solid rgba(255,255,255,.16); border-radius: 17px; background: rgba(19,17,51,.78); box-shadow: 0 18px 42px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.1); backdrop-filter: blur(24px); }
+.client-contact-actions::before { content: ''; position: absolute; top: -1px; right: 20px; left: 20px; height: 1px; background: #c9a23a; }
+.client-contact-label { display: grid; gap: 3px; padding: 0 12px 0 10px; color: #c5c2cf; white-space: nowrap; }
+.client-contact-label strong { color: #f7f5f0; font: 600 13px/1 'Cormorant Garamond', serif; }
+.client-contact-label small { color: #a6a3b5; font: 500 8px/1 'Manrope', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.client-contact-actions a { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 12px; border: 1px solid transparent; border-radius: 11px; color: white; font: 600 9px 'Manrope', sans-serif; letter-spacing: .05em; text-transform: uppercase; transition: transform .2s, filter .2s, border-color .2s; }
+.client-contact-actions a .material-symbols-outlined { font-size: 16px; }
+.client-contact-call { border-color: rgba(201,162,58,.5) !important; background: rgba(164,0,34,.78); }
+.client-contact-whatsapp { border-color: rgba(105,211,145,.28) !important; background: rgba(22,131,75,.78); }
+.client-contact-actions a:hover { transform: translateY(-2px); filter: brightness(1.16); }
+@media (max-width: 520px) { .client-contact-actions { top: 78px; right: 12px; left: 12px; justify-content: stretch; border-radius: 15px; } .client-contact-label { flex: 1; padding: 0 7px; } .client-contact-label strong { font-size: 12px; } .client-contact-label small { font-size: 7px; } .client-contact-actions a { min-height: 36px; padding: 0 10px; font-size: 8px; } .client-contact-actions a .material-symbols-outlined { font-size: 15px; } }
