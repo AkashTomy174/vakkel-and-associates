@@ -27,24 +27,29 @@ function BookingCTA({ practices, isEmergency = false, onClose }) {
     if (!validate()) return
     setLoading(true)
     setServerError(null)
-    const { error } = await supabase.from('bookings').insert({
-      name: form.name.trim(),
-      email: form.email.trim() || null,
-      phone: form.phone.trim(),
-      whatsapp: form.whatsapp.trim() || null,
-      service: form.service || null,
-      medium: form.medium || null,
-      message: form.message.trim() || null,
-      is_emergency: isEmergency,
-      created_at: new Date().toISOString(),
-    })
-    setLoading(false)
-    if (error) {
+    try {
+      const { error } = await supabase.from('bookings').insert({
+        name: form.name.trim(),
+        email: form.email.trim() || null,
+        phone: form.phone.trim(),
+        whatsapp: form.whatsapp.trim() || null,
+        service: form.service || null,
+        medium: form.medium || null,
+        message: form.message.trim() || null,
+        is_emergency: isEmergency,
+        created_at: new Date().toISOString(),
+      })
+      if (error) {
+        setServerError('Something went wrong. Please try again or call the firm directly.')
+        return
+      }
+      setSubmitted(true)
+      setForm(INITIAL)
+    } catch {
       setServerError('Something went wrong. Please try again or call the firm directly.')
-      return
+    } finally {
+      setLoading(false)
     }
-    setSubmitted(true)
-    setForm(INITIAL)
   }
 
   if (submitted) {

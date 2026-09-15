@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ClientContactActions from './components/ClientContactActions/ClientContactActions.jsx'
 import BookingCTA from './components/BookingCTA/BookingCTA.jsx'
 import { JoinUsHomepageCTA } from './pages/JoinUsPage.jsx'
@@ -33,6 +33,49 @@ const detailedPractices = practices.map((practice) => ({
   details: practice.details || practiceDetails[practice.title],
 }))
 
+function useModalAccessibility(isOpen, onClose) {
+  const dialogRef = useRef(null)
+  const closeRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+  useEffect(() => {
+    if (!isOpen) return undefined
+    const trigger = document.activeElement
+    const dialog = dialogRef.current
+    const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    const focusable = () => Array.from(dialog?.querySelectorAll(focusableSelector) || [])
+
+    closeRef.current?.focus()
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        onCloseRef.current()
+        return
+      }
+      if (event.key !== 'Tab' || !dialog) return
+      const elements = focusable()
+      if (!elements.length) return
+      const first = elements[0]
+      const last = elements[elements.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      if (trigger instanceof HTMLElement) trigger.focus()
+    }
+  }, [isOpen])
+
+  return { dialogRef, closeRef }
+}
+
 /* Placeholder team data, retained until the verified lawyer list is ready.
 const advocates = [
   { name: 'Ananya Deshmukh', role: 'Partner · Family & Private Wealth', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=900&q=85', areas: 'Family · Succession' },
@@ -45,6 +88,8 @@ function GlassLandingPage() {
   const [consultOpen, setConsultOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [selectedPractice, setSelectedPractice] = useState(null)
+  const practiceModal = useModalAccessibility(Boolean(selectedPractice), () => setSelectedPractice(null))
+  const consultModal = useModalAccessibility(consultOpen, () => setConsultOpen(false))
   return (
     <main className="glass-site">
       <header className="glass-header">
@@ -65,7 +110,7 @@ function GlassLandingPage() {
         <div className="hero-side-note">01 <span>Precision is not a promise.<br />It is a practice.</span></div>
       </section>
 
-      <section className="practice-section-glass" id="practice"><div className="glass-section-heading"><div><span className="section-kicker">PRACTICE AREAS</span><h2>Specialist practice<br /><em>across 9 domains.</em></h2></div><p>Focused expertise for matters where precision, strategy and experience matter. Every brief begins with understanding what is truly at stake.</p></div><div className="glass-practice-grid">{detailedPractices.map((practice) => <article className={`glass-practice-card ${practice.tone}`} key={practice.title} role="button" tabIndex="0" onClick={() => setSelectedPractice(practice)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') setSelectedPractice(practice) }}><div className="practice-card-top"><span>{practice.number}</span><span className="card-arrow">↗</span></div><span className="practice-eyebrow">{practice.eyebrow}</span><h3>{practice.title}</h3><strong className="practice-service">{practice.service}</strong><p>{practice.copy}</p><div className="practice-tags">{practice.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><a href="#consultation" onClick={(event) => event.stopPropagation()}>Discuss this practice <span>Explore ↗</span></a></article>)}</div></section>
+      <section className="practice-section-glass" id="practice"><div className="glass-section-heading"><div><span className="section-kicker">PRACTICE AREAS</span><h2>Specialist practice<br /><em>across 9 domains.</em></h2></div><p>Focused expertise for matters where precision, strategy and experience matter. Every brief begins with understanding what is truly at stake.</p></div><div className="glass-practice-grid">{detailedPractices.map((practice) => <article className={`glass-practice-card ${practice.tone}`} key={practice.title}><button className="practice-card-trigger" type="button" onClick={() => setSelectedPractice(practice)}><div className="practice-card-top"><span>{practice.number}</span><span className="card-arrow">↗</span></div><span className="practice-eyebrow">{practice.eyebrow}</span><h3>{practice.title}</h3><strong className="practice-service">{practice.service}</strong><p>{practice.copy}</p><div className="practice-tags">{practice.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></button><a href="#consultation">Discuss this practice <span>Explore ↗</span></a></article>)}</div></section>
 
       <section className="win-section"><span className="section-kicker">WHY WE WIN</span><h2>Advocacy is personal.<br /><em>Competence is decisive.</em></h2><p>Legal advocacy is a highly individual professional service. Cases move on judgment, preparation and courtroom skill, so we build every matter around highly competent counsel and a focused strategy.</p></section>
 
@@ -81,14 +126,16 @@ function GlassLandingPage() {
 
       <section className="insights-section" id="insights"><div className="glass-section-heading"><div><span className="section-kicker">NEWS</span><h2>Thinking beyond<br /><em>the brief.</em></h2></div><p>Perspectives on law, business and the decisions that shape both.</p></div><div className="insights-grid">{blogPosts.slice(0, 5).map((post, index) => <Link className={`insight-card ${index === 0 ? 'featured-insight' : index % 2 === 0 ? 'small-insight burgundy' : 'small-insight'}`} to={`/insights/${post.slug}`} key={post.id}><span className="insight-type">{post.category} · {post.date}</span><h3>{post.title}</h3><p>{index === 0 ? post.excerpt : ''}</p><span className="insight-link">Read {index === 0 ? 'analysis' : 'note'} <span>↗</span></span></Link>)}</div></section>
 
-      {selectedPractice && <div className="practice-detail-backdrop" role="presentation" onClick={(event) => event.target === event.currentTarget && setSelectedPractice(null)}><div className="practice-detail-modal" role="dialog" aria-modal="true" aria-labelledby="practice-detail-title"><button className="practice-detail-close" type="button" onClick={() => setSelectedPractice(null)} aria-label="Close details">×</button><span className="section-kicker">{selectedPractice.eyebrow}</span><h2 id="practice-detail-title">{selectedPractice.title}</h2><strong className="practice-detail-service">{selectedPractice.service}</strong><p className="practice-detail-intro">{selectedPractice.copy}</p><div className="practice-detail-sections">{(selectedPractice.details || [{ heading: 'Services covered', items: selectedPractice.tags }]).map((detail) => <section key={detail.heading}><h3>{detail.heading}</h3><ul>{detail.items.map((item) => <li key={item}>{item}</li>)}</ul></section>)}</div><a className="gold-glass-button large" href="#consultation" onClick={() => setSelectedPractice(null)}>Discuss this practice <span>↗</span></a></div></div>}
+      {selectedPractice && <div className="practice-detail-backdrop" role="presentation" onClick={(event) => event.target === event.currentTarget && setSelectedPractice(null)}><div ref={practiceModal.dialogRef} className="practice-detail-modal" role="dialog" aria-modal="true" aria-labelledby="practice-detail-title"><button ref={practiceModal.closeRef} className="practice-detail-close" type="button" onClick={() => setSelectedPractice(null)} aria-label="Close details">×</button><span className="section-kicker">{selectedPractice.eyebrow}</span><h2 id="practice-detail-title">{selectedPractice.title}</h2><strong className="practice-detail-service">{selectedPractice.service}</strong><p className="practice-detail-intro">{selectedPractice.copy}</p><div className="practice-detail-sections">{(selectedPractice.details || [{ heading: 'Services covered', items: selectedPractice.tags }]).map((detail) => <section key={detail.heading}><h3>{detail.heading}</h3><ul>{detail.items.map((item) => <li key={item}>{item}</li>)}</ul></section>)}</div><a className="gold-glass-button large" href="#consultation" onClick={() => setSelectedPractice(null)}>Discuss this practice <span>↗</span></a></div></div>}
 
       <section className="consultation-section" id="consultation"><div className="consult-glow" /><div className="consult-panel"><span className="section-kicker">START A CONVERSATION</span><h2>Your matter deserves<br />a <em>precise strategy.</em></h2><p>Speak with our chamber about your legal requirements. All initial conversations are treated with discretion.</p><div><button className="gold-glass-button large" type="button" onClick={() => setConsultOpen(true)}>Book a consultation <span>↗</span></button><a className="clear-glass-button" href="tel:+916369717520">Call the firm <span>↗</span></a></div></div></section>
 
       <JoinUsHomepageCTA />
-      <footer className="glass-footer"><a className="va-logo" href="#top"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></a><div><span className="footer-label-glass">Explore</span><a href="#about">About</a><a href="#practice">Practice areas</a><a href="/insights">News</a></div><div><span className="footer-label-glass">Connect</span><a href="mailto:Vakkeelandassociates@gmail.com">Vakkeelandassociates@gmail.com</a><a href="tel:+916369717520">+91 6369717520</a><a href="https://wa.me/916369717520">WhatsApp chamber</a></div><div><span className="footer-label-glass">Chambers</span><span>New Delhi · Mumbai · Kerala</span><span>Chandigarh · Bengaluru · Chennai</span><span>© 2026 Vakkeel & Associates</span></div><div><span className="footer-label-glass">For Legal Professionals</span><a href="/join-us">Join Vakkeel & Associates</a><a href="/join-us">Become an Associate Partner</a></div><div className="footer-disclaimer"><strong>IMPORTANT NOTICE — LEGAL TECH PLATFORM &amp; MEDIATION SERVICE</strong><p>Vakkeel &amp; Associates operates as a legal tech startup and mediation service that connects clients with empanelled advocates enrolled with their respective Bar Councils across India. We are not a traditional law firm and do not directly provide legal representation.</p><p>As per the Bar Council of India Rules, advocates are not permitted to advertise or solicit work. The content on this website is published for informational purposes only and does not constitute legal advice, nor does it create an attorney-client relationship. For specific legal advice, please consult a qualified advocate.</p><span>© 2026 Vakkeel &amp; Associates — Legal Tech Startup &amp; Mediation Service. Nilambur, Kerala. Sister Brand of Indian Law School.</span></div></footer>
 
-      {consultOpen && <div className="glass-modal-backdrop" role="presentation" onClick={(event) => event.target === event.currentTarget && setConsultOpen(false)}><div className="glass-consult-modal" role="dialog" aria-modal="true"><button className="glass-close" type="button" onClick={() => setConsultOpen(false)} aria-label="Close">×</button><BookingCTA practices={practices} isEmergency={false} onClose={() => setConsultOpen(false)} /></div></div>}
+      <footer className="glass-footer"><a className="va-logo" href="#top"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></a><div><span className="footer-label-glass">Explore</span><a href="#about">About</a><a href="#practice">Practice areas</a><a href="/insights">News</a></div><div><span className="footer-label-glass">Connect</span><a href="mailto:Vakkeelandassociates@gmail.com">Vakkeelandassociates@gmail.com</a><a href="tel:+916369717520">+91 6369717520</a><a href="https://wa.me/916369717520">WhatsApp chamber</a></div><div><span className="footer-label-glass">Chambers</span><span>New Delhi · Mumbai · Kerala</span><span>Chandigarh · Bengaluru · Chennai</span><span>© 2026 Vakkeel & Associates</span></div><div><span className="footer-label-glass">For Legal Professionals</span><a href="/join">Join Vakkeel & Associates</a><a href="/join">Become an Associate Partner</a></div><div className="footer-disclaimer"><strong>IMPORTANT NOTICE — LEGAL TECH PLATFORM &amp; MEDIATION SERVICE</strong><p>Vakkeel &amp; Associates operates as a legal tech startup and mediation service that connects clients with empanelled advocates enrolled with their respective Bar Councils across India. We are not a traditional law firm and do not directly provide legal representation.</p><p>As per the Bar Council of India Rules, advocates are not permitted to advertise or solicit work. The content on this website is published for informational purposes only and does not constitute legal advice, nor does it create an attorney-client relationship. For specific legal advice, please consult a qualified advocate.</p><span>© 2026 Vakkeel &amp; Associates — Legal Tech Startup &amp; Mediation Service. Nilambur, Kerala. Sister Brand of Indian Law School.</span></div></footer>
+
+
+      {consultOpen && <div className="glass-modal-backdrop" role="presentation" onClick={(event) => event.target === event.currentTarget && setConsultOpen(false)}><div ref={consultModal.dialogRef} className="glass-consult-modal" role="dialog" aria-modal="true"><button ref={consultModal.closeRef} className="glass-close" type="button" onClick={() => setConsultOpen(false)} aria-label="Close">×</button><BookingCTA practices={practices} isEmergency={false} onClose={() => setConsultOpen(false)} /></div></div>}
     </main>
   )
 }

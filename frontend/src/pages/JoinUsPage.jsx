@@ -528,7 +528,7 @@ export function JoinUsHomepageCTA() {
           <h2>Build Your Practice With<br />Vakkeel & Associates.</h2>
           <p>We welcome experienced advocates and legal professionals interested in building their practice within a collaborative and professionally driven legal environment.</p>
         </div>
-        <Link className="ju-homepage-cta-link" to="/join-us">Explore Associate Opportunities <span>↗</span></Link>
+        <Link className="ju-homepage-cta-link" to="/join">Explore Associate Opportunities <span>↗</span></Link>
       </div>
     </section>
   )
