@@ -1,5 +1,5 @@
 .glass-nav {
-  position: fixed;
+  /* Positioning is defined with the responsive glass layout in App.css. */
 }
 
 .hero-motto {
@@ -11,7 +11,7 @@
 
 @media (max-width: 600px) {
   .glass-hero {
-    padding-top: 155px;
+    padding-top: 32px;
   }
 }
 

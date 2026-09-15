@@ -47,13 +47,16 @@ function GlassLandingPage() {
   const [selectedPractice, setSelectedPractice] = useState(null)
   return (
     <main className="glass-site">
-      <div className="glass-announcement"><span className="glass-pulse" />AVAILABLE 24 · 7 · 365 — EMERGENCY LEGAL RESPONSE UNDER 45 MINUTES<span className="glass-announcement-sep">·</span>NRI GLOBAL DESK ACTIVE<span className="glass-announcement-sep">·</span><a href="#consultation">Book now ↗</a></div>
+      <header className="glass-header">
       <nav className="glass-nav">
         <a className="va-logo" href="#top"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></a>
         <div className={menuOpen ? 'glass-nav-links open' : 'glass-nav-links'}><a href="#about" onClick={() => setMenuOpen(false)}>About</a><a href="#practice" onClick={() => setMenuOpen(false)}>Practice Areas</a><a href="/insights" onClick={() => setMenuOpen(false)}>News</a></div>
         <button className="gold-glass-button" type="button" onClick={() => setConsultOpen(true)}>Book a consultation <span>↗</span></button>
         <button className="glass-menu" aria-label={menuOpen ? 'Close menu' : 'Open menu'} type="button" onClick={() => setMenuOpen((current) => !current)}><span /><span /></button>
       </nav>
+      <div className="glass-announcement"><span className="glass-pulse" /><span className="glass-announcement-primary">AVAILABLE 24/7 — EMERGENCY LEGAL RESPONSE UNDER 45 MINUTES</span><span className="glass-announcement-sep">·</span><span className="glass-announcement-secondary">NRI GLOBAL DESK ACTIVE</span><span className="glass-announcement-sep">·</span><a href="#consultation">Book now ↗</a></div>
+      <ClientContactActions />
+      </header>
 
       <section className="glass-hero" id="top">
         <div className="ambient-orb orb-one" /><div className="ambient-orb orb-two" /><div className="ambient-orb orb-three" /><div className="fine-grid" />
@@ -83,7 +86,6 @@ function GlassLandingPage() {
       <section className="consultation-section" id="consultation"><div className="consult-glow" /><div className="consult-panel"><span className="section-kicker">START A CONVERSATION</span><h2>Your matter deserves<br />a <em>precise strategy.</em></h2><p>Speak with our chamber about your legal requirements. All initial conversations are treated with discretion.</p><div><button className="gold-glass-button large" type="button" onClick={() => setConsultOpen(true)}>Book a consultation <span>↗</span></button><a className="clear-glass-button" href="tel:+916369717520">Call the firm <span>↗</span></a></div></div></section>
 
       <JoinUsHomepageCTA />
-      <ClientContactActions />
       <footer className="glass-footer"><a className="va-logo" href="#top"><span>VA</span><strong>VAKKEEL <small>& ASSOCIATES</small></strong></a><div><span className="footer-label-glass">Explore</span><a href="#about">About</a><a href="#practice">Practice areas</a><a href="/insights">News</a></div><div><span className="footer-label-glass">Connect</span><a href="mailto:Vakkeelandassociates@gmail.com">Vakkeelandassociates@gmail.com</a><a href="tel:+916369717520">+91 6369717520</a><a href="https://wa.me/916369717520">WhatsApp chamber</a></div><div><span className="footer-label-glass">Chambers</span><span>New Delhi · Mumbai · Kerala</span><span>Chandigarh · Bengaluru · Chennai</span><span>© 2026 Vakkeel & Associates</span></div><div><span className="footer-label-glass">For Legal Professionals</span><a href="/join-us">Join Vakkeel & Associates</a><a href="/join-us">Become an Associate Partner</a></div><div className="footer-disclaimer"><strong>IMPORTANT NOTICE — LEGAL TECH PLATFORM &amp; MEDIATION SERVICE</strong><p>Vakkeel &amp; Associates operates as a legal tech startup and mediation service that connects clients with empanelled advocates enrolled with their respective Bar Councils across India. We are not a traditional law firm and do not directly provide legal representation.</p><p>As per the Bar Council of India Rules, advocates are not permitted to advertise or solicit work. The content on this website is published for informational purposes only and does not constitute legal advice, nor does it create an attorney-client relationship. For specific legal advice, please consult a qualified advocate.</p><span>© 2026 Vakkeel &amp; Associates — Legal Tech Startup &amp; Mediation Service. Nilambur, Kerala. Sister Brand of Indian Law School.</span></div></footer>
 
       {consultOpen && <div className="glass-modal-backdrop" role="presentation" onClick={(event) => event.target === event.currentTarget && setConsultOpen(false)}><div className="glass-consult-modal" role="dialog" aria-modal="true"><button className="glass-close" type="button" onClick={() => setConsultOpen(false)} aria-label="Close">×</button><BookingCTA practices={practices} isEmergency={false} onClose={() => setConsultOpen(false)} /></div></div>}
