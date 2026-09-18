@@ -1,28 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useConsultation } from "../components/layout/ConsultationContext.jsx";
+import Seo from "../components/Seo/Seo.jsx";
+import { breadcrumbSchema } from "../data/schema.js";
 import "./government-approvals.css";
-
-// No SEO library is used project-wide; set page-level metadata directly.
-function usePageMetadata() {
-  useEffect(() => {
-    const previousTitle = document.title;
-    const descriptionTag = document.querySelector('meta[name="description"]');
-    const previousDescription = descriptionTag?.getAttribute("content");
-    document.title = "Government Approvals & Compliance | Vakkeel & Associates";
-    if (descriptionTag) {
-      descriptionTag.setAttribute(
-        "content",
-        "Vakkeel & Associates provides legal and procedural assistance with government approvals, licences, registrations, documentation and compliance requirements.",
-      );
-    }
-    return () => {
-      document.title = previousTitle;
-      if (descriptionTag && previousDescription !== undefined)
-        descriptionTag.setAttribute("content", previousDescription);
-    };
-  }, []);
-}
 
 const ASSIST_POINTS = [
   "Which approval, permission or NOC may apply to your activity",
@@ -153,12 +134,25 @@ const FAQS = [
 ];
 
 function GovernmentApprovalsPage() {
-  usePageMetadata();
   const { openConsultation } = useConsultation();
   const [openFaq, setOpenFaq] = useState(null);
 
   return (
     <div className="ga-page">
+      <Seo
+        title="Government Approvals & Compliance | Vakkeel & Associates"
+        description="Vakkeel & Associates provides procedural assistance with government approvals, licences, registrations, documentation and compliance requirements in India."
+        path="/government-approvals-compliance"
+        jsonLd={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            {
+              name: "Government Approvals & Compliance",
+              path: "/government-approvals-compliance",
+            },
+          ]),
+        ]}
+      />
       <section className="ga-hero">
         <div className="ga-hero-glow" />
         <div className="ga-hero-content">

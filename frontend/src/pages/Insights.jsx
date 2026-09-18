@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import BlogCard from '../components/BlogCard/BlogCard.jsx'
+import Seo from '../components/Seo/Seo.jsx'
+import { breadcrumbSchema } from '../data/schema.js'
 import blogPosts from '../data/blog.js'
 import './insights.css'
 
@@ -11,6 +13,12 @@ function Insights() {
 
   return (
     <main className="insights-page">
+      <Seo
+        title="Legal News & Insights | Vakkeel & Associates"
+        description="Case notes, judgment summaries and legal updates from Vakkeel & Associates on property, criminal, customs, family and commercial law across India."
+        path="/insights"
+        jsonLd={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'News', path: '/insights' }])]}
+      />
       <section className="insights-hero"><div><span className="insights-kicker">THE JOURNAL</span><h1>Latest<br /><em>News.</em></h1><p>Perspectives on law, business and the decisions that shape both, from the legal strategists at Vakkeel & Associates.</p></div><div className="insights-hero-index"><span>Notes on law,<br />strategy and practice</span></div></section>
       <section className="insights-content">
         <div className="insights-toolbar"><div><span className="insights-kicker">THE ARCHIVE</span><h2>Latest news</h2></div><span className="insights-count">{String(visiblePosts.length).padStart(2, '0')} published notes</span></div>

@@ -37,8 +37,9 @@
 .ju-intro { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; padding: 120px max(48px, calc((100vw - 1250px) / 2)); background: var(--ivory); }
 .ju-intro-divider { background: var(--gold); opacity: .4; margin: 0 60px; }
 .ju-intro-left { padding-right: 60px; }
-.ju-intro-left .ju-kicker { color: #88701e; }
+.ju-intro-left .ju-kicker { color: #6f5a15; }
 .ju-intro-left h2 { margin: 20px 0 0; font-size: clamp(38px, 4vw, 58px); line-height: .92; color: var(--navy); }
+.ju-intro-left h2 em { color: #6f5a15; }
 .ju-intro-right { display: flex; flex-direction: column; justify-content: center; padding-left: 60px; }
 .ju-intro-right p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.85; }
 
@@ -51,20 +52,21 @@
 .ju-why-item { padding: 36px 28px; background: rgba(26,24,64,.6); transition: background .3s; cursor: default; }
 .ju-why-item:hover { background: rgba(36,32,82,.9); }
 .ju-why-item:hover .ju-why-num { color: var(--gold); }
-.ju-why-num { display: block; color: rgba(201,162,58,.5); font: 600 13px 'Cormorant Garamond', serif; letter-spacing: .1em; margin-bottom: 28px; transition: color .3s; }
+.ju-why-num { display: block; color: rgba(201,162,58,.85); font: 600 13px 'Cormorant Garamond', serif; letter-spacing: .1em; margin-bottom: 28px; transition: color .3s; }
 .ju-why-item h3 { margin: 0 0 14px; font-size: 22px; line-height: 1.1; color: white; }
 .ju-why-item p { margin: 0; color: #b8b4c5; font-size: 12px; line-height: 1.7; font-family: 'Manrope', sans-serif; font-weight: 400; }
 
 /* PRACTICE AREAS */
 .ju-practices { padding: 120px max(48px, calc((100vw - 1250px) / 2)); background: var(--ivory); }
 .ju-practices-header { max-width: 700px; margin-bottom: 60px; }
-.ju-practices-header .ju-kicker { color: #88701e; }
+.ju-practices-header .ju-kicker { color: #6f5a15; }
+.ju-practices-header h2 em { color: #6f5a15; }
 .ju-practices-header h2 { margin: 18px 0 16px; font-size: clamp(38px, 4vw, 56px); line-height: .92; color: var(--navy); }
 .ju-practices-header p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
 .ju-practices-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
 .ju-practice-item { padding: 28px 24px; background: var(--ivory); border-bottom: 2px solid transparent; transition: border-color .25s, background .25s; cursor: default; }
 .ju-practice-item:hover { background: white; border-bottom-color: var(--gold); }
-.ju-practice-num { display: block; color: rgba(201,162,58,.6); font: 600 11px 'Manrope', sans-serif; letter-spacing: .1em; margin-bottom: 12px; }
+.ju-practice-num { display: block; color: #6f5a15; font: 600 11px 'Manrope', sans-serif; letter-spacing: .1em; margin-bottom: 12px; }
 .ju-practice-item h3 { margin: 0; font-size: 18px; line-height: 1.2; color: var(--navy); }
 
 /* WHO WE SEEK */

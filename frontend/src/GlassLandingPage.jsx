@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { JoinUsHomepageCTA } from "./pages/JoinUsPage.jsx";
+import JoinUsHomepageCTA from "./components/JoinUsHomepageCTA/JoinUsHomepageCTA.jsx";
 import { useConsultation } from "./components/layout/ConsultationContext.jsx";
 import Founders from "./components/Founders/Founders.jsx";
+import Seo from "./components/Seo/Seo.jsx";
+import { organizationSchema, websiteSchema } from "./data/schema.js";
 import blogPosts from "./data/blog.js";
 import practiceDetails from "./data/practiceDetails.js";
 
@@ -316,6 +318,12 @@ function GlassLandingPage() {
   );
   return (
     <>
+      <Seo
+        title="Vakkeel & Associates | Advocates & Legal Counsel in India"
+        description="Vakkeel & Associates is a legal practice for India and the global Indian diaspora, covering litigation, commercial, property, family, NRI and compliance matters."
+        path="/"
+        jsonLd={[organizationSchema, websiteSchema]}
+      />
       <section className="glass-hero" id="top">
         <div className="ambient-orb orb-one" />
         <div className="ambient-orb orb-two" />
@@ -390,7 +398,7 @@ function GlassLandingPage() {
           <div>
             <span className="section-kicker">PRACTICE AREAS</span>
             <h2>
-              Specialist 
+              Specialist
               <br />
               <em>areas</em>
             </h2>
@@ -411,7 +419,6 @@ function GlassLandingPage() {
                 className="practice-card-trigger"
                 type="button"
                 onClick={() => setSelectedPractice(practice)}
-                aria-label={`Explore details for ${practice.title}`}
               >
                 <div className="practice-card-top">
                   <span>{practice.number}</span>

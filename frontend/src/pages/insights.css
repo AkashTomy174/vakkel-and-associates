@@ -41,6 +41,11 @@
 .article-cover { width: 100%; max-height: 560px; display: block; margin: 65px auto 0; object-fit: cover; filter: saturate(.72); }
 .article-body { max-width: 680px; margin: 58px auto 0; }
 .article-body p { margin: 0 0 25px; color: #4f4c54; font-size: 17px; line-height: 1.9; }
+.article-related { max-width: 680px; margin: 46px auto 0; padding-top: 30px; border-top: 1px solid rgba(255,255,255,.14); }
+.article-related p { margin: 12px 0 18px; color: #b8b6c9; font-size: 14px; line-height: 1.7; }
+.article-related-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.article-related-links a { display: inline-flex; align-items: center; gap: 8px; padding: 11px 15px; border: 1px solid var(--journal-gold); border-radius: 10px; color: #fff; font-size: 12px; font-weight: 600; transition: background .2s, color .2s; }
+.article-related-links a:hover { background: var(--journal-gold); color: #141333; }
 .article-body p:first-child::first-letter { float: left; margin: 8px 9px 0 0; color: var(--journal-red); font: 600 58px/.7 'Fraunces', serif; }
 .missing-post { display: grid; place-content: center; min-height: 100vh; padding: 30px; }
 .missing-post h1 { margin: 18px 0 25px; font: 600 65px/.95 'Fraunces', serif; }

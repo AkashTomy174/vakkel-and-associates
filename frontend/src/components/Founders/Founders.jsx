@@ -37,7 +37,13 @@ function Founders() {
           <article className="founder-card" key={person.id}>
             <div className="founder-photo">
               {person.photo ? (
-                <img src={person.photo} alt={person.name} />
+                <img
+                  src={person.photo}
+                  alt={`${person.name}, ${person.role} of Vakkeel & Associates and Indian Law School`}
+                  width="600"
+                  height="750"
+                  loading="lazy"
+                />
               ) : (
                 <span className="founder-initials" aria-hidden="true">
                   {initials(person.name)}

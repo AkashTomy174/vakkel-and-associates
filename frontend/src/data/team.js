@@ -8,8 +8,8 @@
 //     treatment.
 //   - photo: null falls back to the gold-ring initials avatar. Replace with an
 //     import from src/assets/team/ once real headshots are supplied.
-import cmpkRaheemPhoto from "../assets/team/cmpk-raheem.jpeg";
-import aboobackerSidheeqPhoto from "../assets/team/aboobacker-sidheeq.jpeg";
+import cmpkRaheemPhoto from "../assets/team/cmpk-raheem.webp";
+import aboobackerSidheeqPhoto from "../assets/team/aboobacker-sidheeq.webp";
 
 export const team = [
   {

@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Private / non-indexable areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /dashboard
+Disallow: /onboarding/
+Disallow: /preview/
+Disallow: /*?*utm_
+Disallow: /*?*preview=
+
+Sitemap: https://www.vakkeelandassociates.com/sitemap.xml
