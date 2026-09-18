@@ -14,6 +14,7 @@ const practices = [
   { number: "07", title: "Maritime & Admiralty Law" },
   { number: "08", title: "Wealth Management, Succession & Inheritance Law" },
   { number: "09", title: "Labour & Employment Law" },
+  { number: "10", title: "Government Approvals & Compliance" },
 ];
 
 function useModalAccessibility(isOpen, onClose) {

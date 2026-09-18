@@ -71,9 +71,17 @@ function Hero({ onApply }) {
       <div className="ju-hero-image">
         <div className="ju-hero-image-inner" />
         <div className="ju-hero-image-lines" />
-        <div className="ju-hero-image-accent">
-          <strong>9</strong>
-          <span>Specialist Practice Areas</span>
+        <div className="ju-hero-panel">
+          <span className="ju-hero-panel-label">PRACTICE AREAS</span>
+          <ul className="ju-hero-panel-list">
+            {PRACTICES.map((name) => (
+              <li key={name}>{name}</li>
+            ))}
+          </ul>
+          <div className="ju-hero-image-accent">
+            <strong>9</strong>
+            <span>Specialist  Areas</span>
+          </div>
         </div>
       </div>
     </section>

@@ -15,6 +15,9 @@ function SiteFooter() {
         <span className="footer-label-glass">Explore</span>
         <Link to="/#about">About</Link>
         <Link to="/#practice">Practice areas</Link>
+        <Link to="/government-approvals-compliance">
+          Government Approvals &amp; Compliance
+        </Link>
         <Link to="/insights">News</Link>
       </div>
       <div>

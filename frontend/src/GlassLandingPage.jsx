@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { JoinUsHomepageCTA } from "./pages/JoinUsPage.jsx";
 import { useConsultation } from "./components/layout/ConsultationContext.jsx";
+import Founders from "./components/Founders/Founders.jsx";
 import blogPosts from "./data/blog.js";
 import practiceDetails from "./data/practiceDetails.js";
 
@@ -361,7 +362,7 @@ function GlassLandingPage() {
           <h2>
             Specialist
             <br />
-            <em>practice areas</em>
+            <em>areas</em>
           </h2>
           <div className="panel-list">
             <span>NRI All Legal Services</span>
@@ -389,9 +390,9 @@ function GlassLandingPage() {
           <div>
             <span className="section-kicker">PRACTICE AREAS</span>
             <h2>
-              Specialist practice
+              Specialist 
               <br />
-              <em>across 9 domains.</em>
+              <em>areas</em>
             </h2>
           </div>
           <p>
@@ -438,6 +439,51 @@ function GlassLandingPage() {
         </div>
       </section>
 
+      <section className="glass-service-band" id="government-approvals">
+        <div className="glass-section-heading">
+          <div>
+            <span className="section-kicker">SERVICE OFFERING</span>
+            <h2>
+              Government Approvals
+              <br />
+              <em>&amp; Compliance.</em>
+            </h2>
+          </div>
+          <p>
+            Professional assistance for navigating government procedures,
+            approvals, registrations and compliance requirements.
+          </p>
+        </div>
+        <Link
+          className="glass-service-card"
+          to="/government-approvals-compliance"
+        >
+          <div className="glass-service-card-body">
+            <span className="glass-service-eyebrow">
+              GOVERNMENT APPROVALS &amp; COMPLIANCE
+            </span>
+            <h3>
+              Navigate complex government procedures with structured assistance.
+            </h3>
+            <p>
+              From approvals and registrations to documentation and procedural
+              compliance, Vakkel &amp; Associates provides structured assistance
+              in navigating government-facing processes.
+            </p>
+            <div className="glass-service-tags">
+              <span>Approvals</span>
+              <span>Licences</span>
+              <span>Registrations</span>
+              <span>Documentation</span>
+              <span>Compliance</span>
+            </div>
+          </div>
+          <span className="glass-service-cta">
+            Explore Service <span>↗</span>
+          </span>
+        </Link>
+      </section>
+
       <section className="win-section">
         <span className="section-kicker">WHY WE WIN</span>
         <h2>
@@ -451,6 +497,8 @@ function GlassLandingPage() {
           around highly competent counsel and a focused strategy.
         </p>
       </section>
+
+      <Founders />
 
       {/* Metrics held until verified firm figures are available.
       <section className="trust-glass-section"><div className="section-kicker">02 / THE MEASURE OF OUR WORK</div><div className="trust-glass-grid"><div><strong>08</strong><span>Specialist<br />practice areas</span></div><div><strong>500<span>+</span></strong><span>Matters supported<br />across India</span></div><div><strong>15<span>+</span></strong><span>Years of strategic<br />experience</span></div><div><strong>01</strong><span>Strategic approach<br />to every matter</span></div></div></section>

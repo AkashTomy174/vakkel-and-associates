@@ -38,3 +38,20 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Frontend build / cache
+.vite/
+node_modules/
+dist/
+dist-ssr/
+
+# Environment variables (frontend + backend)
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+# Temp / scratch files
+*.tmp
+*.temp
+*.bak
+*.orig
+.edge-tmp/
