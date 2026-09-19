@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function SiteFooter() {
   return (
     <footer className="glass-footer">
-      <Link className="va-logo" to="/#top">
+      <Link className="va-logo" to="/">
         <span>VA</span>
         <strong>
           VAKKEEL <small>& ASSOCIATES</small>
@@ -15,6 +15,8 @@ function SiteFooter() {
         <span className="footer-label-glass">Explore</span>
         <Link to="/#about">About</Link>
         <Link to="/#practice">Practice areas</Link>
+        <Link to="/#insights">Insights</Link>
+        <Link to="/#consultation">Contact</Link>
         <Link to="/government-approvals-compliance">
           Government Approvals &amp; Compliance
         </Link>

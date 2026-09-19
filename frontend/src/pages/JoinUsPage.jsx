@@ -198,9 +198,9 @@ function Hero({ onApply }) {
           <button className="ju-btn-primary" type="button" onClick={onApply}>
             Apply to Join the Firm ↗
           </button>
-          <a className="ju-btn-secondary" href="#why-join">
+          <Link className="ju-btn-secondary" to="/join#why-join">
             Explore Opportunities ↓
-          </a>
+          </Link>
         </div>
       </div>
       <div className="ju-hero-image">

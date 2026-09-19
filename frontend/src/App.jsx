@@ -22,6 +22,10 @@ function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<GlassLandingPage />} />
+            {/* Practice details are real URLs so the Back button closes them
+                (returning to the homepage) instead of exiting the site, and so
+                each practice is shareable and refreshable. */}
+            <Route path="/practice/:slug" element={<GlassLandingPage />} />
             <Route path="/insights" element={<Insights />} />
             <Route path="/insights/:slug" element={<BlogPost />} />
             <Route path="/join" element={<JoinUsPage />} />

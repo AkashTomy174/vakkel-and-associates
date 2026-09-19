@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
 import JoinUsHomepageCTA from "./components/JoinUsHomepageCTA/JoinUsHomepageCTA.jsx";
 import { useConsultation } from "./components/layout/ConsultationContext.jsx";
 import Founders from "./components/Founders/Founders.jsx";
@@ -12,6 +12,7 @@ import blogMeta from "./data/blogMeta.js";
 const practices = [
   {
     number: "01",
+    slug: "nri-all-legal-services",
     title: "NRI All Legal Services",
     tone: "nri",
     eyebrow: "24 · 7 · 365 | Global Reach & Remote Filing",
@@ -126,6 +127,7 @@ const practices = [
   },
   {
     number: "02",
+    slug: "criminal-law",
     title: "Criminal Law",
     eyebrow: "24 · 7 · 365 | Emergency Defense",
     service: "Criminal Defense & Bail Service",
@@ -142,6 +144,7 @@ const practices = [
   }, // already set
   {
     number: "03",
+    slug: "corporate-commercial-business-law",
     title: "Corporate, Commercial & Business Law",
     eyebrow: "Business & Advisory",
     service: "Corporate & Contract Solutions",
@@ -164,6 +167,7 @@ const practices = [
   },
   {
     number: "04",
+    slug: "real-estate-law",
     title: "Real Estate Law",
     eyebrow: "Asset Protection",
     service: "Property & Land Dispute Service",
@@ -180,6 +184,7 @@ const practices = [
   },
   {
     number: "05",
+    slug: "family-matrimonial",
     title: "Family & Matrimonial",
     eyebrow: "Discreet, Decisive & Cross-Border Domestic Advocacy",
     service: "Family & Matrimonial Law",
@@ -201,6 +206,7 @@ const practices = [
   },
   {
     number: "06",
+    slug: "arbitration-commercial-settlement",
     title: "Arbitration & Commercial Settlement",
     eyebrow: "Dispute Resolution",
     service: "Commercial Arbitration Service",
@@ -216,6 +222,7 @@ const practices = [
   },
   {
     number: "07",
+    slug: "maritime-admiralty-law",
     title: "Maritime & Admiralty Law",
     eyebrow: "Admiralty & Shipping",
     service: "Maritime & Seafarer Relief",
@@ -231,6 +238,7 @@ const practices = [
   },
   {
     number: "08",
+    slug: "wealth-management-succession-inheritance",
     title: "Wealth Management, Succession & Inheritance Law",
     eyebrow: "Estate & Legacy",
     service: "Will & Succession Service",
@@ -246,6 +254,7 @@ const practices = [
   },
   {
     number: "09",
+    slug: "labour-employment-law",
     title: "Labour & Employment Law",
     eyebrow: "Employment & Compliance",
     service: "Executive Employment Service",
@@ -321,25 +330,45 @@ function useModalAccessibility(isOpen, onClose) {
 
 function GlassLandingPage() {
   const { openConsultation } = useConsultation();
-  const [selectedPractice, setSelectedPractice] = useState(null);
+  const navigate = useNavigate();
+  const { slug } = useParams();
+
+  // The practice detail is a real, URL-addressable view (/practice/:slug), not
+  // ephemeral modal state. That is what makes the device Back button close it
+  // and return to the homepage instead of skipping past it and exiting the
+  // site. It also makes a practice link shareable and refreshable.
+  const selectedPractice = slug
+    ? practices.find((practice) => practice.slug === slug) || null
+    : null;
+
+  // Not-found slugs must not leave the visitor on a dead URL with no dialog.
+  useEffect(() => {
+    if (slug && !selectedPractice) navigate("/", { replace: true });
+  }, [slug, selectedPractice, navigate]);
+
   const practiceModal = useModalAccessibility(Boolean(selectedPractice), () =>
-    setSelectedPractice(null),
+    navigate(-1),
   );
 
-  // Fetch the (lazy) detail map the first time a practice is opened, then merge
-  // it in. Practices that carry their own `details` render immediately.
-  function openPractice(practice) {
-    if (practice.details) {
-      setSelectedPractice(practice);
-      return;
-    }
+  // Details for practices that do not inline them are loaded on demand.
+  const [extraDetails, setExtraDetails] = useState(null);
+  useEffect(() => {
+    if (!selectedPractice || selectedPractice.details) return undefined;
+    let active = true;
     loadPracticeDetails().then((details) => {
-      setSelectedPractice({
-        ...practice,
-        details: details?.[practice.title],
-      });
+      if (active) setExtraDetails(details?.[selectedPractice.title] || null);
     });
-  }
+    return () => {
+      active = false;
+    };
+  }, [selectedPractice]);
+
+  const closePractice = useCallback(() => {
+    // Back closes the detail and restores the previous entry (normally the
+    // homepage), rather than pushing yet another history entry.
+    if (window.history.length > 1) navigate(-1);
+    else navigate("/", { replace: true });
+  }, [navigate]);
   return (
     <>
       <Seo
@@ -380,9 +409,9 @@ function GlassLandingPage() {
             >
               Book a consultation <span>↗</span>
             </button>
-            <a className="clear-glass-button" href="#practice">
+            <Link className="clear-glass-button" to="/#practice">
               Explore our practice <span>↗</span>
-            </a>
+            </Link>
           </div>
         </div>
         <div className="hero-panel glass-level-3">
@@ -439,10 +468,9 @@ function GlassLandingPage() {
               className={`glass-practice-card tone-${practice.tone}`}
               key={practice.title}
             >
-              <button
+              <Link
                 className="practice-card-trigger"
-                type="button"
-                onClick={() => openPractice(practice)}
+                to={`/practice/${practice.slug}`}
               >
                 <div className="practice-card-top">
                   <span>{practice.number}</span>
@@ -460,11 +488,11 @@ function GlassLandingPage() {
                 <span className="practice-explore">
                   Explore details <span>↗</span>
                 </span>
-              </button>
-              <a className="practice-discuss" href="#consultation">
+              </Link>
+              <Link className="practice-discuss" to="/#consultation">
                 Discuss this practice{" "}
                 <span className="material-symbols-outlined">arrow_forward</span>
-              </a>
+              </Link>
             </article>
           ))}
         </div>
@@ -555,9 +583,9 @@ function GlassLandingPage() {
             Vakkeel & Associates brings institutional rigour and individual
             attention to the most consequential legal questions.
           </p>
-          <a className="editorial-link" href="#insights">
+          <Link className="editorial-link" to="/#insights">
             Read our news <span>↗</span>
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -600,7 +628,7 @@ function GlassLandingPage() {
           className="practice-detail-backdrop"
           role="presentation"
           onClick={(event) =>
-            event.target === event.currentTarget && setSelectedPractice(null)
+            event.target === event.currentTarget && closePractice()
           }
         >
           <div
@@ -614,7 +642,7 @@ function GlassLandingPage() {
               ref={practiceModal.closeRef}
               className="practice-detail-close"
               type="button"
-              onClick={() => setSelectedPractice(null)}
+              onClick={closePractice}
               aria-label="Close details"
             >
               ×
@@ -627,7 +655,8 @@ function GlassLandingPage() {
             <p className="practice-detail-intro">{selectedPractice.copy}</p>
             <div className="practice-detail-sections">
               {(
-                selectedPractice.details || [
+                selectedPractice.details ||
+                extraDetails || [
                   { heading: "Services covered", items: selectedPractice.tags },
                 ]
               ).map((detail) => (
@@ -641,13 +670,13 @@ function GlassLandingPage() {
                 </section>
               ))}
             </div>
-            <a
+            <Link
               className="gold-glass-button large"
-              href="#consultation"
-              onClick={() => setSelectedPractice(null)}
+              to="/#consultation"
+              onClick={closePractice}
             >
               Discuss this practice <span>↗</span>
-            </a>
+            </Link>
           </div>
         </div>
       )}
