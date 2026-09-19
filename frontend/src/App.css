@@ -9,7 +9,7 @@ button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-decoration: none; }
 main { overflow: hidden; }
-.material-symbols-outlined { font-size: 20px; line-height: 1; vertical-align: middle; }
+.material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; font-size: 20px; line-height: 1; letter-spacing: normal; text-transform: none; white-space: nowrap; word-wrap: normal; direction: ltr; vertical-align: middle; font-feature-settings: 'liga'; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; }
 .announcement { min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 8px 24px; background: var(--navy); color: #f8f2e4; font-size: 10px; font-weight: 700; letter-spacing: .12em; }
 .announcement-detail { color: #aaa9c0; font-weight: 400; letter-spacing: .04em; }.announcement a { color: var(--gold-light); margin-left: 16px; display: flex; gap: 5px; align-items: center; }.announcement a .material-symbols-outlined { font-size: 14px; }.pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 0 5px rgba(255,223,150,.14); }
 .site-header { height: 88px; display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: auto; padding: 0 48px; background: var(--paper); }.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--navy); }.brand-mark { display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid var(--gold); color: var(--gold); font-size: 21px; }.brand strong, .brand small { display: block; }.brand strong { font-size: 18px; letter-spacing: .12em; }.brand small { font-size: 8px; letter-spacing: .25em; color: #77736a; margin-top: 2px; }.site-header nav { display: flex; gap: 30px; color: #514f56; font-size: 12px; font-weight: 600; }.site-header nav a:hover, footer a:hover { color: var(--gold); }.header-cta { border: 1px solid var(--navy); color: var(--navy); background: transparent; padding: 11px 15px; border-radius: 3px; text-transform: uppercase; font-size: 10px; font-weight: 700; letter-spacing: .08em; cursor: pointer; display: flex; align-items: center; gap: 8px; }.header-cta:hover { background: var(--navy); color: var(--gold-light); }
@@ -110,3 +110,26 @@ footer { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 30px; pad
 .glass-announcement a:hover, .glass-announcement-cta:hover { color: var(--glass-gold); }
 @keyframes glass-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(201,162,58,.2); } 50% { box-shadow: 0 0 0 7px rgba(201,162,58,.05); } }
 @media (max-width: 600px) { .glass-announcement { gap: 5px 8px; padding: 10px 14px 8px; font-size: 8px; letter-spacing: .06em; line-height: 1.5; } .glass-announcement-primary { flex-basis: 100%; } .glass-announcement-secondary, .glass-announcement-sep { display: none; } .glass-announcement a { white-space: nowrap; } }
+/* ---------------------------------------------------------------------------
+   Mobile performance overrides (must stay LAST so they win over the decorative
+   rules above).
+   On phones the decorative blurred "ambient orb" layers (filter: blur(90px),
+   each a 420x420px layer, infinitely animated) and the backdrop-filter glass
+   layers are disproportionately expensive to composite and directly inflate
+   Style & Layout / paint time. We keep the exact same layout and content, we
+   only remove the GPU-costly effects. Desktop is untouched.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .ambient-orb { filter: none; opacity: .2; animation: none; }
+  .glass-nav,
+  .hero-panel,
+  .glass-practice-card,
+  .team-overlay,
+  .glass-consult-modal,
+  .insight-card { backdrop-filter: none; }
+
+  /* The drifting orbs and the pulsing announcement dot run infinite animations
+     that keep waking the compositor; stop them on small screens. */
+  .glass-pulse,
+  .fine-grid { animation: none; }
+}

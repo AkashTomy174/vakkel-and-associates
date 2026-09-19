@@ -5,8 +5,9 @@ import { useConsultation } from "./components/layout/ConsultationContext.jsx";
 import Founders from "./components/Founders/Founders.jsx";
 import Seo from "./components/Seo/Seo.jsx";
 import { organizationSchema, websiteSchema } from "./data/schema.js";
-import blogPosts from "./data/blog.js";
-import practiceDetails from "./data/practiceDetails.js";
+// Lightweight metadata only — the full article bodies in data/blog.js stay out
+// of the homepage bundle (they are only needed on /insights/:slug).
+import blogMeta from "./data/blogMeta.js";
 
 const practices = [
   {
@@ -260,10 +261,18 @@ const practices = [
   },
 ];
 
-const detailedPractices = practices.map((practice) => ({
-  ...practice,
-  details: practice.details || practiceDetails[practice.title],
-}));
+// `practiceDetails` is a sizeable map that is only needed when a practice modal
+// is opened, so it is imported on demand instead of being bundled into the
+// homepage. Practices that already inline their own `details` need no fetch.
+let practiceDetailsCache = null;
+function loadPracticeDetails() {
+  if (!practiceDetailsCache) {
+    practiceDetailsCache = import("./data/practiceDetails.js").then(
+      (mod) => mod.default,
+    );
+  }
+  return practiceDetailsCache;
+}
 
 function useModalAccessibility(isOpen, onClose) {
   const dialogRef = useRef(null);
@@ -316,6 +325,21 @@ function GlassLandingPage() {
   const practiceModal = useModalAccessibility(Boolean(selectedPractice), () =>
     setSelectedPractice(null),
   );
+
+  // Fetch the (lazy) detail map the first time a practice is opened, then merge
+  // it in. Practices that carry their own `details` render immediately.
+  function openPractice(practice) {
+    if (practice.details) {
+      setSelectedPractice(practice);
+      return;
+    }
+    loadPracticeDetails().then((details) => {
+      setSelectedPractice({
+        ...practice,
+        details: details?.[practice.title],
+      });
+    });
+  }
   return (
     <>
       <Seo
@@ -410,7 +434,7 @@ function GlassLandingPage() {
           </p>
         </div>
         <div className="glass-practice-grid">
-          {detailedPractices.map((practice) => (
+          {practices.map((practice) => (
             <article
               className={`glass-practice-card tone-${practice.tone}`}
               key={practice.title}
@@ -418,7 +442,7 @@ function GlassLandingPage() {
               <button
                 className="practice-card-trigger"
                 type="button"
-                onClick={() => setSelectedPractice(practice)}
+                onClick={() => openPractice(practice)}
               >
                 <div className="practice-card-top">
                   <span>{practice.number}</span>
@@ -552,7 +576,7 @@ function GlassLandingPage() {
           </p>
         </div>
         <div className="insights-grid">
-          {blogPosts.slice(0, 5).map((post, index) => (
+          {blogMeta.slice(0, 5).map((post, index) => (
             <Link
               className={`insight-card ${index === 0 ? "featured-insight" : index % 2 === 0 ? "small-insight burgundy" : "small-insight"}`}
               to={`/insights/${post.slug}`}

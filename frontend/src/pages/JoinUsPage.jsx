@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import supabase from "../api/supabaseClient";
+import { requireSupabase } from "../api/supabaseClient";
 import Seo from "../components/Seo/Seo.jsx";
 import { breadcrumbSchema } from "../data/schema.js";
 import "./join-us.css";
@@ -493,28 +493,35 @@ function ApplicationForm({ formRef }) {
     if (!validate(5)) return;
     setStatus("loading");
     setServerError(null);
-    const { error } = await supabase.from("associate_applications").insert({
-      full_name: form.full_name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-      whatsapp: form.whatsapp.trim() || null,
-      location: form.location.trim(),
-      designation: form.designation.trim(),
-      enrollment_number: form.enrollment_number.trim(),
-      enrollment_year: form.enrollment_year || null,
-      years_of_practice: form.years_of_practice || null,
-      current_organization: form.current_organization.trim() || null,
-      primary_practice_area: form.primary_practice_area || null,
-      secondary_practice_area: form.secondary_practice_area || null,
-      jurisdictions: form.jurisdictions.trim() || null,
-      expertise: form.expertise.trim() || null,
-      experience: form.experience.trim() || null,
-      linkedin_url: form.linkedin_url.trim() || null,
-      website_url: form.website_url.trim() || null,
-      association_type: form.association_type,
-      message: form.message.trim() || null,
-      created_at: new Date().toISOString(),
-    });
+    let error;
+    try {
+      ({ error } = await requireSupabase()
+        .from("associate_applications")
+        .insert({
+          full_name: form.full_name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          whatsapp: form.whatsapp.trim() || null,
+          location: form.location.trim(),
+          designation: form.designation.trim(),
+          enrollment_number: form.enrollment_number.trim(),
+          enrollment_year: form.enrollment_year || null,
+          years_of_practice: form.years_of_practice || null,
+          current_organization: form.current_organization.trim() || null,
+          primary_practice_area: form.primary_practice_area || null,
+          secondary_practice_area: form.secondary_practice_area || null,
+          jurisdictions: form.jurisdictions.trim() || null,
+          expertise: form.expertise.trim() || null,
+          experience: form.experience.trim() || null,
+          linkedin_url: form.linkedin_url.trim() || null,
+          website_url: form.website_url.trim() || null,
+          association_type: form.association_type,
+          message: form.message.trim() || null,
+          created_at: new Date().toISOString(),
+        }));
+    } catch {
+      error = true;
+    }
     if (error) {
       setServerError(
         "Something went wrong. Please try again or contact us directly.",

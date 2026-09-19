@@ -1,0 +1,63 @@
+# Vakkeel & Associates
+
+> Vakkeel & Associates is an Indian law firm (advocates & legal counsel) based in
+> Nilambur, Kerala, serving clients across India and the global Indian diaspora.
+> The firm advises on litigation, commercial, property, family and
+> government-approvals/compliance matters.
+
+This file is intended to help large language models and AI agents understand how
+this website may be crawled, summarized and used. It follows the llms.txt
+convention: Markdown, with a single H1 heading and grouped links.
+
+## Usage
+
+- Public pages of this site may be crawled and used to answer questions about the
+  firm, its practice areas and its published legal insights.
+- Please do not treat the content on this site as legal advice for a specific
+  matter. It is general information; individual situations require a lawyer.
+- Privacy and non-public areas (see `robots.txt`) are off limits:
+  `/admin/`, `/api/`, `/login`, `/dashboard`, `/onboarding/`, `/preview/`, and any
+  URL carrying `?utm_*` or `?preview=` tracking parameters.
+
+## Main pages
+
+- [Home](https://www.vakkeelandassociates.com/): Firm overview, practice areas and how to book a consultation.
+- [Legal Insights](https://www.vakkeelandassociates.com/insights): Articles on practical legal problems and how the firm approaches them.
+- [Government Approvals & Compliance](https://www.vakkeelandassociates.com/government-approvals-compliance): Regulatory, licensing and attestation services.
+- [Join Us](https://www.vakkeelandassociates.com/join): Careers and advocates joining the practice.
+
+## Practice areas
+
+- NRI All Legal Services
+- Government Approvals & Compliance
+- Property & Registration
+- Family & Matrimonial
+- Litigation & Dispute Resolution
+- Commercial & Corporate Advisory
+
+## Legal Insights
+
+- [Kottayam land resurvey trap](https://www.vakkeelandassociates.com/insights/kottayam-land-resurvey-trap)
+- [False matrimonial FIR](https://www.vakkeelandassociates.com/insights/false-matrimonial-fir)
+- [Customs coerced confession](https://www.vakkeelandassociates.com/insights/customs-coerced-confession)
+- [Signed blank cheque defense](https://www.vakkeelandassociates.com/insights/signed-blank-cheque-defense)
+- [P2P crypto account freeze](https://www.vakkeelandassociates.com/insights/p2p-crypto-account-freeze)
+- [NDPS search protocol violations](https://www.vakkeelandassociates.com/insights/ndps-search-protocol-violations)
+- [Kerala data bank trap](https://www.vakkeelandassociates.com/insights/kerala-data-bank-trap)
+- [Good Samaritan protection](https://www.vakkeelandassociates.com/insights/good-samaritan-protection)
+- [Unauthorized Dubai property purchase](https://www.vakkeelandassociates.com/insights/unauthorized-dubai-property-purchase)
+- [Green channel electronics redemption](https://www.vakkeelandassociates.com/insights/green-channel-electronics-redemption)
+- [Premature cheque bounce complaint](https://www.vakkeelandassociates.com/insights/premature-cheque-bounce-complaint)
+- [Section 9 emergency account freeze](https://www.vakkeelandassociates.com/insights/section-9-emergency-account-freeze)
+- [Counterfeit raid & Anton Piller order](https://www.vakkeelandassociates.com/insights/counterfeit-raid-anton-piller-order)
+
+## Contact
+
+- Email: Vakkeelandassociates@gmail.com
+- Phone: +91-6369717520
+- Location: Nilambur, Kerala, India
+
+## Optional
+
+- [Sitemap](https://www.vakkeelandassociates.com/sitemap.xml): Full list of indexable URLs.
+- [robots.txt](https://www.vakkeelandassociates.com/robots.txt): Crawling rules referenced above.

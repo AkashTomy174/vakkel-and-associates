@@ -1,0 +1,144 @@
+/* Splash screen — first-paint overlay shown once per browser session.
+   Colours come from the shared glass palette declared on .glass-site in
+   App.css (--glass-deep / --glass-navy / --glass-gold / --glass-ivory /
+   --glass-muted). Fallbacks match those tokens so the splash is correct even
+   if it renders before the .glass-site class is applied. */
+
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  /* Same deep-navy family as the hero: #0e0d2b -> #1a1840. */
+  background:
+    radial-gradient(circle at 50% 42%, rgba(36, 32, 82, 0.55), transparent 62%),
+    linear-gradient(160deg, #0e0d2b 0%, #12102f 55%, #0e0d2b 100%);
+  color: var(--glass-ivory, #f7f5f0);
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+
+.splash-screen.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Faint gold grid for texture, at ~5% opacity. A repeating CSS gradient, so
+   it costs no extra request or font/asset weight. */
+.splash-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 162, 58, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 58, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+}
+
+.splash-inner {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+/* 64x64 mark, 1.5px gold border, serif initials. */
+.splash-mark {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 1.5px solid var(--glass-gold, #c9a23a);
+  color: var(--glass-gold, #c9a23a);
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.splash-name {
+  margin: 2px 0 0;
+  color: var(--glass-ivory, #f7f5f0);
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.splash-tagline {
+  margin: 0;
+  color: var(--glass-gold, #c9a23a);
+  font-family: "Manrope", "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* 3-dot pulse loader, staggered 0.2s apart. */
+.splash-loader {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.splash-loader span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--glass-gold, #c9a23a);
+  opacity: 0.35;
+  animation: splash-pulse 1.2s ease-in-out infinite;
+}
+
+.splash-loader span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.splash-loader span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes splash-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+
+.splash-skip {
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  color: var(--glass-muted, #c5c2cf);
+  font-family: "Manrope", "Plus Jakarta Sans", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* Reduced motion: no pulse, and no fade — just show/hide instantly. */
+@media (prefers-reduced-motion: reduce) {
+  .splash-screen {
+    transition: none;
+  }
+
+  .splash-loader span {
+    animation: none;
+    opacity: 0.6;
+  }
+}

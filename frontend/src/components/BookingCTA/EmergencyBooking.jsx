@@ -1,4 +1,4 @@
-import { supabase } from '../../api/supabaseClient'
+import { requireSupabase } from '../../api/supabaseClient'
 import { useState } from 'react'
 
 const INITIAL = { name: '', phone: '', medium: '', message: '' }
@@ -24,19 +24,23 @@ function EmergencyBooking({ onClose }) {
     e.preventDefault()
     if (!validate()) return
     setStatus('loading')
-    const { error } = await supabase.from('bookings').insert({
-      name: form.name.trim(),
-      phone: form.phone.trim(),
-      medium: form.medium || null,
-      message: form.message.trim() || null,
-      is_emergency: true,
-      created_at: new Date().toISOString(),
-    })
-    if (error) {
+    try {
+      const { error } = await requireSupabase().from('bookings').insert({
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        medium: form.medium || null,
+        message: form.message.trim() || null,
+        is_emergency: true,
+        created_at: new Date().toISOString(),
+      })
+      if (error) {
+        setStatus('error')
+      } else {
+        setStatus('success')
+        setForm(INITIAL)
+      }
+    } catch {
       setStatus('error')
-    } else {
-      setStatus('success')
-      setForm(INITIAL)
     }
   }
 

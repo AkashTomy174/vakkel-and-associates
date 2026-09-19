@@ -12,3 +12,6 @@ Disallow: /*?*utm_
 Disallow: /*?*preview=
 
 Sitemap: https://www.vakkeelandassociates.com/sitemap.xml
+# Guidance for AI/LLM crawlers and agents
+# See: https://www.vakkeelandassociates.com/llms.txt
+LLMs-Txt: https://www.vakkeelandassociates.com/llms.txt

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import supabase from '../../api/supabaseClient'
+import { requireSupabase } from '../../api/supabaseClient'
 
 const INITIAL = { name: '', email: '', phone: '', whatsapp: '', service: '', medium: '', message: '' }
 
@@ -28,7 +28,7 @@ function BookingCTA({ practices, isEmergency = false, onClose }) {
     setLoading(true)
     setServerError(null)
     try {
-      const { error } = await supabase.from('bookings').insert({
+      const { error } = await requireSupabase().from('bookings').insert({
         name: form.name.trim(),
         email: form.email.trim() || null,
         phone: form.phone.trim(),

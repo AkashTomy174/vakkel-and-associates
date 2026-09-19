@@ -10,6 +10,7 @@ env/
 
 # Django
 *.sqlite3
+*.sqlite3-journal
 media/
 staticfiles/
 
@@ -44,11 +45,25 @@ htmlcov/
 node_modules/
 dist/
 dist-ssr/
+.vite-cache/
+cache/
+*.tsbuildinfo
+# Test / coverage output
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
 
 # Environment variables (frontend + backend)
 frontend/.env
 frontend/.env.*
 !frontend/.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+# Vercel / deploy metadata
+.vercel/
+
 # Temp / scratch files
 *.tmp
 *.temp
