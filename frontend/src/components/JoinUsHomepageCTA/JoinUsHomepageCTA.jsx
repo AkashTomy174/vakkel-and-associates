@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+// Styles for the .ju-homepage-cta* classes live in the join page stylesheet, so
+// it must be imported here — this component also renders on the homepage, where
+// JoinUsPage (and therefore join-us.css) is never loaded.
+import "../../pages/join-us.css";
 
 // Homepage CTA promoting associate opportunities. Extracted from JoinUsPage so
 // the homepage does not statically import the whole join page (keeps /join
