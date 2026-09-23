@@ -26,7 +26,7 @@ function Founders() {
           </h2>
         </div>
         <p>
-          Vakkeel &amp; Associates and Indian Law School are led by founders who
+          Vakkeel &amp; Associates is led by founders who
           bring a shared commitment to legal education, professional standards
           and client service.
         </p>
@@ -39,7 +39,7 @@ function Founders() {
               {person.photo ? (
                 <img
                   src={person.photo}
-                  alt={`${person.name}, ${person.role} of Vakkeel & Associates and Indian Law School`}
+                  alt={`${person.name}, ${person.role} of Vakkeel & Associates `}
                   width="600"
                   height="750"
                   loading="lazy"

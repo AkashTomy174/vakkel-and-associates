@@ -60,7 +60,7 @@ function SiteFooter() {
         </p>
         <span>
           © 2026 Vakkeel &amp; Associates — Legal Tech Startup &amp; Mediation
-          Service. Nilambur, Kerala. Sister Brand of Indian Law School.
+          Service. Nilambur, Kerala. .
         </span>
       </div>
     </footer>
